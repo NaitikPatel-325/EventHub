@@ -1,0 +1,34 @@
+name: EventHub
+description: "A new Flutter project."
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.3.4 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  http: ^1.2.1
+  shared_preferences: ^2.0.13
+  share_plus: ^10.0.2
+  carousel_slider: ^5.0.0
+  intl: ^0.19.0
+  flutter_local_notifications: ^17.1.2
+  image_picker: ^1.1.1
+  untitled: ^0.0.1-alpha.3
+  cupertino_icons: ^1.0.6
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/images/image1.png
+    - assets/images/image2.png
+    - assets/images/image3.png
