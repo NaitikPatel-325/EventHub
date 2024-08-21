@@ -33,21 +33,22 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _navigateToPage(int index) {
+    Navigator.popUntil(context, (route) => route.isFirst);
     switch (index) {
       case 0:
-        Navigator.push(context, MaterialPageRoute(builder: (context) => const ProfilePage()));
-        break;
-      case 1:
         Navigator.push(context, MaterialPageRoute(builder: (context) => const CreateEventPage()));
         break;
-      case 2:
+      case 1:
         Navigator.push(context, MaterialPageRoute(builder: (context) => const RegisterPage()));
         break;
-      case 3:
+      case 2:
         Navigator.push(context, MaterialPageRoute(builder: (context) => const QRCodeScannerPage()));
         break;
-      case 4:
+      case 3:
         Navigator.push(context, MaterialPageRoute(builder: (context) => const LiveUpdatesPage()));
+        break;
+      case 4:
+        Navigator.push(context, MaterialPageRoute(builder: (context) => const ProfilePage()));
         break;
       case 5:
         Navigator.push(context, MaterialPageRoute(builder: (context) => const FeedbackPage()));
@@ -112,31 +113,31 @@ class _HomePageState extends State<HomePage> {
                 context,
                 Icons.person,
                 'Profile',
-                0,
+                4,
               ),
               _buildDrawerItem(
                 context,
                 Icons.event,
                 'Create & Manage Events',
-                1,
+                0,
               ),
               _buildDrawerItem(
                 context,
                 Icons.person_add,
                 'Register for Events',
-                2,
+                1,
               ),
               _buildDrawerItem(
                 context,
                 Icons.qr_code_scanner,
                 'QR Code',
-                3,
+                2,
               ),
               _buildDrawerItem(
                 context,
                 Icons.notifications,
                 'Live Updates',
-                4,
+                3,
               ),
               _buildDrawerItem(
                 context,
@@ -182,7 +183,7 @@ class _HomePageState extends State<HomePage> {
                 viewportFraction: 0.9,
               ),
             ),
-            const SizedBox(height: 16.0), // Space between carousel and stats
+            const SizedBox(height: 16.0),
             // Statistical Data
             _buildStatistics(),
           ],
@@ -217,16 +218,16 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _buildDrawerItem(
-    BuildContext context,
-    IconData icon,
-    String title,
-    int index,
-  ) {
+      BuildContext context,
+      IconData icon,
+      String title,
+      int index,
+      ) {
     return ListTile(
       leading: Icon(icon, color: Colors.blue),
       title: Text(title),
       onTap: () {
-        Navigator.pop(context); // Close the drawer
+        // Navigator.pop(context);
         _onNavItemTapped(index);
       },
     );
@@ -245,7 +246,7 @@ class _HomePageState extends State<HomePage> {
           elevation: 4.0,
           child: ListTile(
             title: const Text('Total Events'),
-            subtitle: Text('15'), // Placeholder data
+            subtitle: Text('15'),
             leading: Icon(Icons.event, color: Colors.blue),
           ),
         ),
@@ -254,7 +255,7 @@ class _HomePageState extends State<HomePage> {
           elevation: 4.0,
           child: ListTile(
             title: const Text('Upcoming Registrations'),
-            subtitle: Text('25'), // Placeholder data
+            subtitle: Text('25'),
             leading: Icon(Icons.person_add, color: Colors.blue),
           ),
         ),
@@ -263,7 +264,7 @@ class _HomePageState extends State<HomePage> {
           elevation: 4.0,
           child: ListTile(
             title: const Text('QR Codes Scanned'),
-            subtitle: Text('8'), // Placeholder data
+            subtitle: Text('8'),
             leading: Icon(Icons.qr_code_scanner, color: Colors.blue),
           ),
         ),
@@ -272,7 +273,7 @@ class _HomePageState extends State<HomePage> {
           elevation: 4.0,
           child: ListTile(
             title: const Text('Live Updates Sent'),
-            subtitle: Text('5'), // Placeholder data
+            subtitle: Text('5'),
             leading: Icon(Icons.notifications, color: Colors.blue),
           ),
         ),
