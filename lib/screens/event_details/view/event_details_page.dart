@@ -7,7 +7,6 @@ class EventDetailsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Use eventId to fetch and display event details
     return Scaffold(
       appBar: AppBar(
         title: const Text('Event Details'),

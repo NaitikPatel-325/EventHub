@@ -1,12 +1,5 @@
 import 'package:carousel_slider/carousel_slider.dart';
-import 'screens/feedback_page/views/feedback_page.dart';
-import 'screens/profile_page/view/profile_page.dart';
 import 'package:flutter/material.dart';
-import 'screens/createevent/view/create_Event_page.dart';
-import 'screens/register_page/view/register_page.dart';
-import 'screens/qr/view/qr_code_scanner_page.dart';
-import 'screens/live_update/view/live_updates_page.dart';
-import 'screens/notification_page/view/notifications_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -26,35 +19,54 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _onNavItemTapped(int index) {
-    setState(() {
-      _selectedIndex = index;
+    if (index < 4) {
+      setState(() {
+        _selectedIndex = index;
+        _navigateToPage(index);
+      });
+    } else {
+      // Navigate to pages that don't correspond to a BottomNavigationBar item
       _navigateToPage(index);
-    });
+    }
   }
 
   void _navigateToPage(int index) {
     Navigator.popUntil(context, (route) => route.isFirst);
     switch (index) {
       case 0:
-        Navigator.push(context, MaterialPageRoute(builder: (context) => const CreateEventPage()));
+        Navigator.pushNamed(context, '/create-event').then((_) {
+          setState(() {
+            _selectedIndex = 0;
+          });
+        });
         break;
       case 1:
-        Navigator.push(context, MaterialPageRoute(builder: (context) => const RegisterPage()));
+        Navigator.pushNamed(context, '/register');
         break;
       case 2:
-        Navigator.push(context, MaterialPageRoute(builder: (context) => const QRCodeScannerPage()));
+        Navigator.pushNamed(context, '/qr-code');
         break;
       case 3:
-        Navigator.push(context, MaterialPageRoute(builder: (context) => const LiveUpdatesPage()));
+        Navigator.pushNamed(context, '/live-updates');
         break;
       case 4:
-        Navigator.push(context, MaterialPageRoute(builder: (context) => const ProfilePage()));
+        Navigator.pushNamed(context, '/profile').then((_) {
+          setState(() {
+            _selectedIndex = 0; // Reset to a valid index
+          });
+        });
         break;
       case 5:
-        Navigator.push(context, MaterialPageRoute(builder: (context) => const FeedbackPage()));
+        Navigator.pushNamed(context, '/feedback').then((_) {
+          setState(() {
+            _selectedIndex = 0; // Reset to a valid index
+          });
+        });
         break;
     }
   }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -63,7 +75,6 @@ class _HomePageState extends State<HomePage> {
       'assets/images/image2.png',
       'assets/images/image3.png',
     ];
-
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: _isDarkMode ? ThemeData.dark() : ThemeData.light(),
@@ -84,10 +95,7 @@ class _HomePageState extends State<HomePage> {
               icon: const Icon(Icons.notifications),
               color: Colors.black,
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const NotificationsPage()),
-                );
+                Navigator.pushNamed(context, '/notifications');
               },
             ),
           ],
@@ -97,10 +105,10 @@ class _HomePageState extends State<HomePage> {
             padding: EdgeInsets.zero,
             children: <Widget>[
               DrawerHeader(
-                decoration: BoxDecoration(
+                decoration: const BoxDecoration(
                   color: Colors.blue,
                 ),
-                child: Text(
+                child: const Text(
                   'EventHub',
                   style: TextStyle(
                     color: Colors.white,
@@ -146,11 +154,11 @@ class _HomePageState extends State<HomePage> {
                 5,
               ),
               ListTile(
-                leading: Icon(
+                leading: const Icon(
                   Icons.dark_mode,
                   color: Colors.blue,
                 ),
-                title: Text('Dark Mode'),
+                title: const Text('Dark Mode'),
                 trailing: Switch(
                   value: _isDarkMode,
                   onChanged: _toggleDarkMode,
@@ -168,7 +176,7 @@ class _HomePageState extends State<HomePage> {
               itemBuilder: (context, index, realIndex) {
                 final imgUrl = imgList[index];
                 return Container(
-                  margin: EdgeInsets.symmetric(horizontal: 5.0),
+                  margin: const EdgeInsets.symmetric(horizontal: 5.0),
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(5.0),
                     child: Image.asset(imgUrl, fit: BoxFit.cover),
@@ -209,9 +217,9 @@ class _HomePageState extends State<HomePage> {
               label: 'Live Updates',
             ),
           ],
-          selectedItemColor: Colors.blue, // Color of the selected item
-          unselectedItemColor: Colors.blue, // Color of unselected items
-          showUnselectedLabels: true, // Show labels for unselected items
+          selectedItemColor: Colors.blue,
+          unselectedItemColor: Colors.blue,
+          showUnselectedLabels: true,
         ),
       ),
     );
@@ -227,7 +235,6 @@ class _HomePageState extends State<HomePage> {
       leading: Icon(icon, color: Colors.blue),
       title: Text(title),
       onTap: () {
-        // Navigator.pop(context);
         _onNavItemTapped(index);
       },
     );
@@ -244,8 +251,8 @@ class _HomePageState extends State<HomePage> {
         const SizedBox(height: 16.0),
         Card(
           elevation: 4.0,
-          child: ListTile(
-            title: const Text('Total Events'),
+          child: const ListTile(
+            title: Text('Total Events'),
             subtitle: Text('15'),
             leading: Icon(Icons.event, color: Colors.blue),
           ),
@@ -253,8 +260,8 @@ class _HomePageState extends State<HomePage> {
         const SizedBox(height: 8.0),
         Card(
           elevation: 4.0,
-          child: ListTile(
-            title: const Text('Upcoming Registrations'),
+          child: const ListTile(
+            title: Text('Upcoming Registrations'),
             subtitle: Text('25'),
             leading: Icon(Icons.person_add, color: Colors.blue),
           ),
@@ -262,8 +269,8 @@ class _HomePageState extends State<HomePage> {
         const SizedBox(height: 8.0),
         Card(
           elevation: 4.0,
-          child: ListTile(
-            title: const Text('QR Codes Scanned'),
+          child: const ListTile(
+            title: Text('QR Codes Scanned'),
             subtitle: Text('8'),
             leading: Icon(Icons.qr_code_scanner, color: Colors.blue),
           ),
@@ -271,8 +278,8 @@ class _HomePageState extends State<HomePage> {
         const SizedBox(height: 8.0),
         Card(
           elevation: 4.0,
-          child: ListTile(
-            title: const Text('Live Updates Sent'),
+          child: const ListTile(
+            title: Text('Live Updates Sent'),
             subtitle: Text('5'),
             leading: Icon(Icons.notifications, color: Colors.blue),
           ),
