@@ -25,7 +25,6 @@ class _HomePageState extends State<HomePage> {
         _navigateToPage(index);
       });
     } else {
-      // Navigate to pages that don't correspond to a BottomNavigationBar item
       _navigateToPage(index);
     }
   }
@@ -47,7 +46,7 @@ class _HomePageState extends State<HomePage> {
         Navigator.pushNamed(context, '/qr-code');
         break;
       case 3:
-        Navigator.pushNamed(context, '/live-updates');
+        Navigator.pushNamed(context, '/signout');
         break;
       case 4:
         Navigator.pushNamed(context, '/profile').then((_) {
