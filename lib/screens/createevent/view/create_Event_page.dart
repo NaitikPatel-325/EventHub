@@ -22,7 +22,7 @@ class _CreateEventPageState extends State<CreateEventPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Create Event'),
-        backgroundColor: Colors.blueAccent,
+        backgroundColor: Colors.lightBlue,
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),

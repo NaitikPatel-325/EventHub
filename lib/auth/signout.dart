@@ -18,13 +18,64 @@ class SignOutPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Sign Out'),
-      ),
-      body: Center(
-        child: ElevatedButton(
-          onPressed: () => _signOut(context),
-          child: const Text('Sign Out'),
+      backgroundColor: Colors.white,
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Icon(
+              Icons.exit_to_app,
+              size: 100.0,
+              color: Colors.teal,
+            ),
+            SizedBox(height: 30.0),
+            Text(
+              'Are you sure you want to sign out?',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                fontSize: 20.0,
+                color: Colors.grey.shade800,
+              ),
+            ),
+            SizedBox(height: 40.0),
+            ElevatedButton(
+              onPressed: () => _signOut(context),
+              style: ElevatedButton.styleFrom(
+                minimumSize: Size(double.infinity, 50), backgroundColor: Colors.teal,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+              ),
+              child: Text(
+                'Sign Out',
+                style: TextStyle(
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            SizedBox(height: 20.0),
+            OutlinedButton(
+              onPressed: () => Navigator.of(context).pop(),
+              style: OutlinedButton.styleFrom(
+                minimumSize: Size(double.infinity, 50),
+                side: BorderSide(color: Colors.teal),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+              ),
+              child: Text(
+                'Cancel',
+                style: TextStyle(
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.teal,
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );

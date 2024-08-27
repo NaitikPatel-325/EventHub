@@ -46,7 +46,7 @@ class _HomePageState extends State<HomePage> {
         Navigator.pushNamed(context, '/qr-code');
         break;
       case 3:
-        Navigator.pushNamed(context, '/signout');
+        Navigator.pushNamed(context, '/notifications');
         break;
       case 4:
         Navigator.pushNamed(context, '/profile').then((_) {
@@ -57,6 +57,13 @@ class _HomePageState extends State<HomePage> {
         break;
       case 5:
         Navigator.pushNamed(context, '/feedback').then((_) {
+          setState(() {
+            _selectedIndex = 0; // Reset to a valid index
+          });
+        });
+        break;
+        case 7:
+        Navigator.pushNamed(context, '/signout').then((_) {
           setState(() {
             _selectedIndex = 0; // Reset to a valid index
           });
@@ -87,7 +94,7 @@ class _HomePageState extends State<HomePage> {
               fontWeight: FontWeight.bold,
             ),
           ),
-          backgroundColor: Colors.white,
+          backgroundColor: Colors.blue,
           centerTitle: true,
           actions: [
             IconButton(
@@ -163,6 +170,12 @@ class _HomePageState extends State<HomePage> {
                   onChanged: _toggleDarkMode,
                 ),
               ),
+              _buildDrawerItem(
+                context,
+                Icons.logout_outlined,
+                'Logout',
+                7,
+              ),
             ],
           ),
         ),
@@ -211,10 +224,7 @@ class _HomePageState extends State<HomePage> {
               icon: Icon(Icons.qr_code_scanner),
               label: 'QR Code',
             ),
-            BottomNavigationBarItem(
-              icon: Icon(Icons.notifications),
-              label: 'Live Updates',
-            ),
+            
           ],
           selectedItemColor: Colors.blue,
           unselectedItemColor: Colors.blue,

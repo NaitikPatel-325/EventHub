@@ -4,10 +4,7 @@
     "html-webpack-plugin": "^5.6.0",
     "webpack": "^5.94.0",
     "webpack-cli": "^5.1.4"
-  }
-}
-
-{
+  },
   "dependencies": {
     "firebase": "^10.13.0"
   }
