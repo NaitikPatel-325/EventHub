@@ -46,7 +46,14 @@ class _LoginState extends State<Login> {
                 onPressed: () => signin(),
                 child: Text('Login'),
               ),
-
+              ElevatedButton(
+                onPressed: () => Navigator.of(context).pushNamed('/signup'),
+                child: Text('Register'),
+              ),
+              ElevatedButton(
+                onPressed: () => Navigator.of(context).pushNamed('/forgot'),
+                child: Text('Forgot Password'),
+              ),
             ],
           ),
         )
