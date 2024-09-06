@@ -7,10 +7,16 @@ class SignOutPage extends StatelessWidget {
   Future<void> _signOut(BuildContext context) async {
     try {
       await _auth.signOut();
-      Navigator.pushReplacementNamed(context, '/login');
+      Navigator.of(context).pushReplacementNamed('/login');
     } catch (e) {
+      // Log the error for debugging purposes
+      print('Error signing out: $e');
+
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error signing out. Please try again.')),
+        SnackBar(
+          content: Text('Error signing out. Please try again.'),
+          backgroundColor: Colors.red,
+        ),
       );
     }
   }
@@ -43,7 +49,8 @@ class SignOutPage extends StatelessWidget {
             ElevatedButton(
               onPressed: () => _signOut(context),
               style: ElevatedButton.styleFrom(
-                minimumSize: Size(double.infinity, 50), backgroundColor: Colors.teal,
+                minimumSize: Size(double.infinity, 50),
+                backgroundColor: Colors.teal,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10.0),
                 ),

@@ -18,10 +18,8 @@ class _LoginState extends State<Login> {
         email: email.text,
         password: password.text,
       );
-      // Navigate to the main page on success
       Navigator.of(context).pushReplacementNamed('/home');
     } catch (e) {
-      // Handle errors and display a message to the user
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Failed to sign in: ${e.toString()}')),
       );

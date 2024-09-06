@@ -14,6 +14,8 @@ import 'auth/signup.dart';
 import 'auth/login.dart';
 import 'auth/forgot.dart';
 import 'auth/signout.dart';
+import 'home.dart';
+
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -48,6 +50,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(fontFamily: 'Schyler'),
       home: Wrapper(),
       routes: {
+        '/home': (context) => HomePage(),
         '/create-event': (context) => CreateEventPage(),
         '/register': (context) => RegisterPage(),
         '/live-updates': (context) =>  LiveUpdatesPage(),

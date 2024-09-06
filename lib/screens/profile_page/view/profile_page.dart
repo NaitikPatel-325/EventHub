@@ -30,7 +30,7 @@ class ProfilePage extends StatelessWidget {
               const SizedBox(height: 16),
               Text(
                 'User Name',
-                style: Theme.of(context).textTheme.headline5?.copyWith(
+                style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                       fontWeight: FontWeight.bold,
                       color: Colors.black87,
                     ),
@@ -38,7 +38,7 @@ class ProfilePage extends StatelessWidget {
               const SizedBox(height: 8),
               Text(
                 'user@example.com',
-                style: Theme.of(context).textTheme.subtitle1?.copyWith(
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(
                       color: Colors.grey[600],
                     ),
               ),
