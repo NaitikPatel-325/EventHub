@@ -8,6 +8,12 @@ class LiveUpdatesPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Live Updates'),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
       ),
       body: Center(
         child: const Text('Live updates will be displayed here.'),

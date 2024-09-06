@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:carousel_slider/carousel_slider.dart';
 import 'widgets/app_bar.dart';
 import 'widgets/drawer.dart';
 import 'widgets/carousel.dart';
@@ -14,7 +13,8 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   bool _isDarkMode = false;
-  int _selectedIndex = 0;
+  int _selectedIndex = 0; // For BottomNavigationBar
+  int _drawerSelectedIndex = 0; // For Drawer
 
   void _toggleDarkMode(bool value) {
     setState(() {
@@ -22,21 +22,10 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-   void _onNavItemDrawerTapped(int index) {
-      setState(() {
-        _selectedIndex = index;
-      });
-      _navigateToPage(index);
-  }
-
   void _onNavItemTapped(int index) {
-      setState(() {
-        _selectedIndex = index;
-      });
-      _navigateToPage(index);
-  }
-
-  void _navigateToPage(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
     Navigator.popUntil(context, (route) => route.isFirst);
     switch (index) {
       case 0:
@@ -48,20 +37,27 @@ class _HomePageState extends State<HomePage> {
       case 2:
         Navigator.pushNamed(context, '/qr-code');
         break;
-      case 3:
-        Navigator.pushNamed(context, '/notifications');
-        break;
-      case 4:
-        Navigator.pushNamed(context, '/profile');
-        break;
-      case 5:
-        Navigator.pushNamed(context, '/feedback');
-        break;
-      case 6:
-        Navigator.pushNamed(context, '/signout');
+      default:
         break;
     }
   }
+
+  void _onNavItemDrawerTapped(int index) {
+    setState(() {
+      _drawerSelectedIndex = index;
+    });
+    Navigator.popUntil(context, (route) => route.isFirst);
+    switch (index) {
+      case 0:
+      Navigator.pushNamed(context, '/profile');
+      break;
+    case 1:
+      Navigator.pushNamed(context, '/feedback');
+      break;
+    case 2:
+      Navigator.pushNamed(context, '/signout');
+      break;
+    }  }
 
   @override
   Widget build(BuildContext context) {
@@ -70,17 +66,17 @@ class _HomePageState extends State<HomePage> {
       theme: _isDarkMode ? ThemeData.dark() : ThemeData.light(),
       home: Scaffold(
         appBar: buildAppBar(context),
-        drawer: buildDrawer(context, _toggleDarkMode, _isDarkMode, _onNavItemTapped),
+        drawer: buildDrawer(context, _toggleDarkMode, _isDarkMode, _onNavItemDrawerTapped),
         body: ListView(
           padding: const EdgeInsets.all(16.0),
-          children: <Widget>[
-            Carousel(imgList: const [
+          children: const <Widget>[
+            Carousel(imgList: [
               'assets/images/image1.png',
               'assets/images/image2.png',
               'assets/images/image3.png',
             ]),
-            const SizedBox(height: 16.0),
-            const Statistics(),
+            SizedBox(height: 16.0),
+            Statistics(),
           ],
         ),
         bottomNavigationBar: BottomNavigationBar(
@@ -99,3 +95,4 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
+

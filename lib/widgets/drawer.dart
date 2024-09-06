@@ -23,11 +23,8 @@ Widget buildDrawer(
             ),
           ),
         ),
-        _buildDrawerItem(context, Icons.person, 'Profile', 4, onNavItemDrawerTapped),
-        _buildDrawerItem(context, Icons.event, 'Create & Manage Events', 0, onNavItemDrawerTapped),
-        _buildDrawerItem(context, Icons.person_add, 'Register for Events', 1, onNavItemDrawerTapped),
-        _buildDrawerItem(context, Icons.qr_code_scanner, 'QR Code', 2, onNavItemDrawerTapped),
-        _buildDrawerItem(context, Icons.feedback, 'Feedback', 5, onNavItemDrawerTapped),
+        _buildDrawerItem(context, Icons.person, 'Profile', 0, onNavItemDrawerTapped),
+        _buildDrawerItem(context, Icons.feedback, 'Feedback', 1, onNavItemDrawerTapped),
         ListTile(
           leading: const Icon(Icons.dark_mode, color: Colors.blue),
           title: const Text('Dark Mode'),
@@ -36,7 +33,7 @@ Widget buildDrawer(
             onChanged: toggleDarkMode,
           ),
         ),
-        _buildDrawerItem(context, Icons.logout_outlined, 'Logout', 6, onNavItemDrawerTapped),
+        _buildDrawerItem(context, Icons.logout_outlined, 'Logout', 2, onNavItemDrawerTapped),
       ],
     ),
   );

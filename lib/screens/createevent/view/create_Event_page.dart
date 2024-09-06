@@ -23,6 +23,12 @@ class _CreateEventPageState extends State<CreateEventPage> {
       appBar: AppBar(
         title: const Text('Create Event'),
         backgroundColor: Colors.lightBlue,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
