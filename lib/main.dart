@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:provider/provider.dart';
 import 'auth/wrapper.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
@@ -10,6 +11,7 @@ import 'screens/live_update/view/live_updates_page.dart';
 import 'screens/profile_page/view/profile_page.dart';
 import 'screens/feedback_page/views/feedback_page.dart';
 import 'screens/notification_page/view/notifications_page.dart';
+import 'auth/Google_sign.dart';
 import 'auth/signup.dart';
 import 'auth/login.dart';
 import 'auth/forgot.dart';
@@ -19,7 +21,8 @@ import 'home.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await dotenv.load(fileName: "../../.env");
+  await dotenv.load(fileName: ".env");
+  
   if (kIsWeb) {
     await Firebase.initializeApp(
       options: FirebaseOptions(
@@ -31,7 +34,7 @@ void main() async {
         appId: dotenv.env['APP_ID']!,
         measurementId: dotenv.env['MEASUREMENT_ID']!,
       ),
-    );
+    );  
   } else {
     await Firebase.initializeApp();
   }
@@ -45,25 +48,31 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(fontFamily: 'Schyler'),
-      home: Wrapper(),
-      routes: {
-        '/home': (context) => HomePage(),
-        '/create-event': (context) => CreateEventPage(),
-        '/register': (context) => RegisterPage(),
-        '/live-updates': (context) =>  LiveUpdatesPage(),
-        '/profile': (context) =>  ProfilePage(),
-        '/feedback': (context) =>  FeedbackPage(),
-        '/notifications': (context) =>  NotificationsPage(),
-        '/wrapper': (context) =>  Wrapper(),
-        '/signup': (context) =>  Signup(),
-        '/login': (context) =>  Login(),
-        '/forgot': (context) =>  ForgotPasswordPage(),
-        '/signout': (context) => SignOutPage(),
-      },
-      
+
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(create: (context) => GoogleSignInProvider()),
+      ],
+      child :MaterialApp(
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(fontFamily: 'Schyler'),
+        home: Wrapper(),
+        routes: {
+          '/home': (context) => HomePage(),
+          '/create-event': (context) => CreateEventPage(),
+          '/register': (context) => RegisterPage(),
+          '/live-updates': (context) =>  LiveUpdatesPage(),
+          '/profile': (context) =>  ProfilePage(),
+          '/feedback': (context) =>  FeedbackPage(),
+          '/notifications': (context) =>  NotificationsPage(),
+          '/wrapper': (context) =>  Wrapper(),
+          '/signup': (context) =>  Signup(),
+          '/login': (context) =>  Login(),
+          '/forgot': (context) =>  ForgotPasswordPage(),
+          '/signout': (context) => SignOutPage(),
+        },
+
+      )
     );
   }
 }

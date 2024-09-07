@@ -12,7 +12,16 @@
           "package_name": "com.example.eventhub"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "79782838207-360ng236885ddp6lijbtaubr296f9f3p.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.eventhub",
+            "certificate_hash": "ab58fd15511ae6e5dde0a7773ca85bfef78cd653"
+          }
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyCCVE_uFXWwWTq8wEdfwpBiDmBzbXwNWRc"
@@ -20,7 +29,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "79782838207-iffb942stilpc0bed5njlr2gntqhjs31.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

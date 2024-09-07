@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'Google_sign.dart';  // Import your GoogleSignInProvider class
+import 'package:provider/provider.dart';  // Import provider
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -21,7 +23,9 @@ class _LoginState extends State<Login> {
       Navigator.of(context).pushReplacementNamed('/home');
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to sign in: ${e.toString()}')),
+        SnackBar(content: Text(
+            'Failed to sign in: You may have entered an incorrect email or password or the account does not exist.'
+        )),
       );
     }
   }
@@ -30,27 +34,14 @@ class _LoginState extends State<Login> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      // appBar: AppBar(
-      //   title: Text(
-      //     'Login',
-      //     style: TextStyle(
-      //       color: Colors.white,
-      //       fontSize: 24.0,
-      //       fontWeight: FontWeight.bold,
-      //     ),
-      //   ),
-      //   centerTitle: true,
-      //   backgroundColor: Colors.teal,
-      //   elevation: 0,
-      // ),
       body: SingleChildScrollView(
-        padding: EdgeInsets.symmetric(horizontal: 24.0),
+        padding: const EdgeInsets.symmetric(horizontal: 24.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(height: 60.0),
-            Text(
+            const SizedBox(height: 60.0),
+            const Text(
               'Welcome Back!',
               style: TextStyle(
                 fontSize: 32.0,
@@ -58,7 +49,7 @@ class _LoginState extends State<Login> {
                 color: Colors.teal,
               ),
             ),
-            SizedBox(height: 10.0),
+            const SizedBox(height: 10.0),
             Text(
               'Please sign in to continue',
               style: TextStyle(
@@ -66,40 +57,40 @@ class _LoginState extends State<Login> {
                 color: Colors.grey.shade600,
               ),
             ),
-            SizedBox(height: 40.0),
+            const SizedBox(height: 40.0),
             TextField(
               controller: email,
               keyboardType: TextInputType.emailAddress,
               decoration: InputDecoration(
-                prefixIcon: Icon(Icons.email, color: Colors.teal),
+                prefixIcon: const Icon(Icons.email, color: Colors.teal),
                 hintText: 'Email Address',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.0),
                 ),
               ),
             ),
-            SizedBox(height: 20.0),
+            const SizedBox(height: 20.0),
             TextField(
               controller: password,
               obscureText: true,
               decoration: InputDecoration(
-                prefixIcon: Icon(Icons.lock, color: Colors.teal),
+                prefixIcon: const Icon(Icons.lock, color: Colors.teal),
                 hintText: 'Password',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.0),
                 ),
               ),
             ),
-            SizedBox(height: 20.0),
+            const SizedBox(height: 20.0),
             ElevatedButton(
               onPressed: signin,
               style: ElevatedButton.styleFrom(
-                minimumSize: Size(double.infinity, 50), backgroundColor: Colors.teal,
+                minimumSize: const Size(double.infinity, 50), backgroundColor: Colors.teal,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10.0),
                 ),
               ),
-              child: Text(
+              child: const Text(
                 'Login',
                 style: TextStyle(
                   fontSize: 18.0,
@@ -108,13 +99,13 @@ class _LoginState extends State<Login> {
                 ),
               ),
             ),
-            SizedBox(height: 20.0),
+            const SizedBox(height: 20.0),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 GestureDetector(
                   onTap: () => Navigator.of(context).pushNamed('/signup'),
-                  child: Text(
+                  child: const Text(
                     'Register',
                     style: TextStyle(
                       color: Colors.teal,
@@ -125,7 +116,7 @@ class _LoginState extends State<Login> {
                 ),
                 GestureDetector(
                   onTap: () => Navigator.of(context).pushNamed('/forgot'),
-                  child: Text(
+                  child: const Text(
                     'Forgot Password?',
                     style: TextStyle(
                       color: Colors.teal,
@@ -136,7 +127,25 @@ class _LoginState extends State<Login> {
                 ),
               ],
             ),
-            SizedBox(height: 40.0),
+            const SizedBox(height: 40.0),
+
+            ElevatedButton.icon(
+              onPressed: () {
+                final provider = Provider.of<GoogleSignInProvider>(context, listen: false);
+                provider.googleLogin();  
+              },
+              icon: const Icon(Icons.login),
+              label: const Text('Sign in with Google'),
+              style: ElevatedButton.styleFrom(
+                minimumSize: const Size(double.infinity, 50),
+                backgroundColor: Colors.white,
+                foregroundColor: Colors.black,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                  side: const BorderSide(color: Colors.black),
+                ),
+              ),
+            ),
           ],
         ),
       ),

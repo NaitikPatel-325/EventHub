@@ -25,10 +25,11 @@ class Forgot extends State<ForgotPasswordPage> {
     try {
       await _auth.sendPasswordResetEmail(email: _email.text.trim());
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Password reset email sent!')),
+        SnackBar(content: Text('If the email is associated with an account, a password reset link has been sent.')),
       );
     } on FirebaseAuthException catch (e) {
       String errorMessage;
+      print(e.code);
       switch (e.code) {
         case 'user-not-found':
           errorMessage = 'No user found with this email.';

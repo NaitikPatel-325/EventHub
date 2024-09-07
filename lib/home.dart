@@ -13,8 +13,8 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   bool _isDarkMode = false;
-  int _selectedIndex = 0; // For BottomNavigationBar
-  int _drawerSelectedIndex = 0; // For Drawer
+  int _selectedIndex = 0; 
+  int _drawerSelectedIndex = 0; 
 
   void _toggleDarkMode(bool value) {
     setState(() {

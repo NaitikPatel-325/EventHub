@@ -9,7 +9,6 @@ class SignOutPage extends StatelessWidget {
       await _auth.signOut();
       Navigator.of(context).pushReplacementNamed('/login');
     } catch (e) {
-      // Log the error for debugging purposes
       print('Error signing out: $e');
 
       ScaffoldMessenger.of(context).showSnackBar(

@@ -2,6 +2,7 @@
 <html>
 <head>
   <meta charset="UTF-8">
+  <meta name="google-signin-client_id" content="217343031395-fnm2fv9ku9ot86a352p0lvpum4c2aibv.apps.googleusercontent.com">
   <title>Event Hub</title>
   <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.0.0/firebase-auth.js"></script>
@@ -17,6 +18,15 @@
       measurementId: "G-0HS1JX5B6K"
     };
     firebase.initializeApp(firebaseConfig);
+    function setFirebaseAuthPersistence() {
+      firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL)
+        .then(() => {
+          console.log('Persistence set to local');
+        })
+        .catch((error) => {
+          console.error('Error setting persistence:', error);
+        });
+    }
   </script>
 </head>
 <body>
