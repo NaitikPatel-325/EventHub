@@ -11,8 +11,7 @@
 migrate_working_dir/
 node_modules/
 
-eventhub-64c1d-firebase-adminsdk-uscny-21867e91bb.json/
-
+ServiceAccountKey.json/
 # IntelliJ related
 *.iml
 *.ipr
