@@ -11,7 +11,6 @@ import 'screens/live_update/view/live_updates_page.dart';
 import 'screens/profile_page/view/profile_page.dart';
 import 'screens/feedback_page/views/feedback_page.dart';
 import 'screens/notification_page/view/notifications_page.dart';
-import 'auth/Google_sign.dart';
 import 'auth/signup.dart';
 import 'auth/login.dart';
 import 'auth/forgot.dart';
@@ -49,11 +48,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (context) => GoogleSignInProvider()),
-      ],
-      child :MaterialApp(
+    return MaterialApp(
         debugShowCheckedModeBanner: false,
         theme: ThemeData(fontFamily: 'Schyler'),
         home: Wrapper(),
@@ -72,7 +67,6 @@ class MyApp extends StatelessWidget {
           '/signout': (context) => SignOutPage(),
         },
 
-      )
-    );
+      );
   }
 }

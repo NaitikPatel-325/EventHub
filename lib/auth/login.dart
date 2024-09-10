@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'Google_sign.dart';  // Import your GoogleSignInProvider class
-import 'package:provider/provider.dart';  // Import provider
+import 'package:google_sign_in/google_sign_in.dart';
 
 class Login extends StatefulWidget {
   const Login({Key? key}) : super(key: key);
@@ -16,10 +15,14 @@ class _LoginState extends State<Login> {
 
   signin() async {
     try {
-      await FirebaseAuth.instance.signInWithEmailAndPassword(
+      UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
         email: email.text,
         password: password.text,
       );
+      String? token = await userCredential.user?.getIdToken();
+      if (token != null) {
+        Navigator.of(context).pushReplacementNamed('/home');
+      }
       Navigator.of(context).pushReplacementNamed('/home');
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -29,6 +32,7 @@ class _LoginState extends State<Login> {
       );
     }
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -127,25 +131,7 @@ class _LoginState extends State<Login> {
                 ),
               ],
             ),
-            const SizedBox(height: 40.0),
-
-            ElevatedButton.icon(
-              onPressed: () {
-                final provider = Provider.of<GoogleSignInProvider>(context, listen: false);
-                provider.googleLogin();  
-              },
-              icon: const Icon(Icons.login),
-              label: const Text('Sign in with Google'),
-              style: ElevatedButton.styleFrom(
-                minimumSize: const Size(double.infinity, 50),
-                backgroundColor: Colors.white,
-                foregroundColor: Colors.black,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                  side: const BorderSide(color: Colors.black),
-                ),
-              ),
-            ),
+            const SizedBox(height: 40.0)
           ],
         ),
       ),

@@ -6,6 +6,8 @@
     "webpack-cli": "^5.1.4"
   },
   "dependencies": {
+    "cors": "^2.8.5",
+    "env": "^0.0.2",
     "firebase": "^10.13.0"
   }
 }

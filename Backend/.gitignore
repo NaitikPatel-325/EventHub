@@ -1,0 +1,77 @@
+# Miscellaneous
+*.class
+*.log
+*.pyc
+*.swp
+.DS_Store
+.atom/
+.buildlog/
+.history
+.svn/
+migrate_working_dir/
+node_modules/
+
+eventhub-64c1d-firebase-adminsdk-uscny-21867e91bb.json/
+
+# IntelliJ related
+*.iml
+*.ipr
+*.iws
+.idea/
+.env
+
+# The .vscode folder contains launch configuration and tasks you configure in
+# VS Code which you may wish to be included in version control, so this line
+# is commented out by default.
+#.vscode/
+
+# Flutter/Dart/Pub related
+**/doc/api/
+**/ios/Flutter/.last_build_id
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.pub-cache/
+.pub/
+/build/
+
+# Symbolication related
+app.*.symbols
+
+# Obfuscation related
+app.*.map.json
+
+# Android Studio will place build artifacts here
+/android/app/debug
+/android/app/profile
+/android/app/release
+
+# Flutter/Dart/Pub related
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+.pub/
+build/
+# iOS
+ios/Pods/
+ios/.symlinks/
+ios/Flutter/Flutter.podspec
+# macOS
+macos/Flutter/Flutter.podspec
+# Android
+android/.gradle/
+android/app/build/
+# Web
+web/generated_plugin_registrant.dart
+# Miscellaneous
+*.log
+*.lock
+*.tmp
+*.swp
+*.swo
+*.DS_Store
+# Google services
+google-services.json
+# Firebase
+firebase-messaging-sw.js

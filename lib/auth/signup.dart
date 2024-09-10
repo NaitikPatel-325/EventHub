@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+
 
 class Signup extends StatefulWidget {
   const Signup({Key? key}) : super(key: key);
@@ -12,28 +14,51 @@ class _SignupState extends State<Signup> {
   TextEditingController email = TextEditingController();
   TextEditingController password = TextEditingController();
 
-  signup() async {
+  void signUp(String email, String password) async {
+    final String baseUrl = 'http://192.168.15.58:3000';
+    print("insidesignup");
     try {
-      await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: email.text,
-        password: password.text,
+      final response = await http.post(
+        Uri.parse('$baseUrl/signup'),
+        headers: <String, String>{'Content-Type': 'application/json; charset=UTF-8'},
+        body: jsonEncode(<String, String>{'email': email, 'password': password}),
       );
-      Navigator.of(context).pushReplacementNamed('/wrapper');
-    } on FirebaseAuthException catch (e) {
-      String message;
-      if (e.code == 'weak-password') {
-        message = 'The password provided is too weak.';
-      } else if (e.code == 'email-already-in-use') {
-        message = 'The account already exists for that email.';
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('User created successfully!'),
+            backgroundColor: Colors.green, // Color for success
+          ),
+        );
+        Navigator.of(context).pushReplacementNamed('/login');
+      } else if (response.statusCode == 409) { // Assuming 409 Conflict for user exists
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('User already exists.'),
+            backgroundColor: Colors.red, // Color for error
+          ),
+        );
       } else {
-        message = 'An error occurred. Please try again.';
+        print('Failed to create user: ${response.body}');
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Failed to create user.'),
+            backgroundColor: Colors.orange, // Color for warning
+          ),
+        );
       }
+    } catch (error) {
+      print('Error during sign up: $error');
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(message)),
+        SnackBar(
+          content: Text('Error during sign up.'),
+          backgroundColor: Colors.red, // Color for error
+        ),
       );
     }
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -100,7 +125,7 @@ class _SignupState extends State<Signup> {
             ),
             SizedBox(height: 20.0),
             ElevatedButton(
-              onPressed: signup,
+              onPressed: () => signUp(email.text,password.text),
               style: ElevatedButton.styleFrom(
                 minimumSize: Size(double.infinity, 50), backgroundColor: Colors.teal,
                 shape: RoundedRectangleBorder(
