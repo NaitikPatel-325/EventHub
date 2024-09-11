@@ -2,14 +2,14 @@ import express from 'express';
 import admin from 'firebase-admin';
 import cors from 'cors';
 import dotenv from 'dotenv';
-import serviceAccount from '../ServiceAccountKey.json' assert { type: 'json' };
+// import serviceAccount from '../ServiceAccountKey.json' assert { type: 'json' };
 
 dotenv.config({
     path: './.env'
 })
 
 admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
+//   credential: admin.credential.cert(serviceAccount),
   databaseURL: process.env.FIREBASE_DATABASE_URL 
 });
 const app = express();

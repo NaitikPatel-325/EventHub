@@ -1,3 +1,4 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 
 class CreateEventPage extends StatefulWidget {
@@ -16,6 +17,7 @@ class _CreateEventPageState extends State<CreateEventPage> {
   final _eventDescriptionController = TextEditingController();
   DateTime? _selectedDate;
   TimeOfDay? _selectedTime;
+  bool _isLoading = false;
 
   @override
   Widget build(BuildContext context) {
@@ -30,96 +32,125 @@ class _CreateEventPageState extends State<CreateEventPage> {
           },
         ),
       ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              _buildTextField(
-                controller: _eventNameController,
-                label: 'Event Name',
-                hintText: 'Enter the event name',
-                icon: Icons.event,
-              ),
-              const SizedBox(height: 16.0),
-              _buildDateTimePicker(
-                context: context,
-                controller: _eventDateController,
-                label: 'Event Date',
-                icon: Icons.calendar_today,
-                onTap: () => _selectDate(context),
-                hintText: _selectedDate == null
-                    ? 'Select event date'
-                    : _formatDate(_selectedDate!),
-              ),
-              const SizedBox(height: 16.0),
-              _buildDateTimePicker(
-                context: context,
-                controller: _eventTimeController,
-                label: 'Event Time',
-                icon: Icons.access_time,
-                onTap: () => _selectTime(context),
-                hintText: _selectedTime == null
-                    ? 'Select event time'
-                    : _formatTime(_selectedTime!),
-              ),
-              const SizedBox(height: 16.0),
-              _buildTextField(
-                controller: _eventLocationController,
-                label: 'Event Location',
-                hintText: 'Enter the event location',
-                icon: Icons.location_on,
-              ),
-              const SizedBox(height: 16.0),
-              _buildTextField(
-                controller: _eventDescriptionController,
-                label: 'Event Description',
-                hintText: 'Enter a brief description',
-                icon: Icons.description,
-                maxLines: 4,
-              ),
-              const SizedBox(height: 20.0),
-              ElevatedButton(
-                onPressed: () {
-                  if (_formKey.currentState?.validate() ?? false) {
-                    final eventName = _eventNameController.text;
-                    final eventDate = _eventDateController.text;
-                    final eventTime = _eventTimeController.text;
-                    final eventLocation = _eventLocationController.text;
-                    final eventDescription = _eventDescriptionController.text;
-
-                    print('Event Name: $eventName');
-                    print('Event Date: $eventDate');
-                    print('Event Time: $eventTime');
-                    print('Event Location: $eventLocation');
-                    print('Event Description: $eventDescription');
-
-                    _eventNameController.clear();
-                    _eventDateController.clear();
-                    _eventTimeController.clear();
-                    _eventLocationController.clear();
-                    _eventDescriptionController.clear();
-                    _selectedDate = null;
-                    _selectedTime = null;
-
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Event created successfully!')),
-                    );
-                  }
-                },
-                style: ElevatedButton.styleFrom(
-                  padding: const EdgeInsets.symmetric(vertical: 16.0),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(8.0),
+      body: Stack(
+        children: [
+          SingleChildScrollView(
+            padding: const EdgeInsets.all(16.0),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  _buildTextField(
+                    controller: _eventNameController,
+                    label: 'Event Name',
+                    hintText: 'Enter the event name',
+                    icon: Icons.event,
                   ),
-                ),
-                child: const Text('Submit', style: TextStyle(fontSize: 16.0)),
+                  const SizedBox(height: 16.0),
+                  _buildDateTimePicker(
+                    context: context,
+                    controller: _eventDateController,
+                    label: 'Event Date',
+                    icon: Icons.calendar_today,
+                    onTap: () => _selectDate(context),
+                    hintText: _selectedDate == null
+                        ? 'Select event date'
+                        : _formatDate(_selectedDate!),
+                  ),
+                  const SizedBox(height: 16.0),
+                  _buildDateTimePicker(
+                    context: context,
+                    controller: _eventTimeController,
+                    label: 'Event Time',
+                    icon: Icons.access_time,
+                    onTap: () => _selectTime(context),
+                    hintText: _selectedTime == null
+                        ? 'Select event time'
+                        : _formatTime(_selectedTime!),
+                  ),
+                  const SizedBox(height: 16.0),
+                  _buildTextField(
+                    controller: _eventLocationController,
+                    label: 'Event Location',
+                    hintText: 'Enter the event location',
+                    icon: Icons.location_on,
+                  ),
+                  const SizedBox(height: 16.0),
+                  _buildTextField(
+                    controller: _eventDescriptionController,
+                    label: 'Event Description',
+                    hintText: 'Enter a brief description',
+                    icon: Icons.description,
+                    maxLines: 4,
+                  ),
+                  const SizedBox(height: 20.0),
+                  ElevatedButton(
+                    onPressed: () async {
+                      if (_formKey.currentState?.validate() ?? false) {
+                        setState(() {
+                          _isLoading = true;
+                        });
+                        await Future.delayed(const Duration(seconds: 3));
+                        final eventName = _eventNameController.text;
+                        final eventDate = _eventDateController.text;
+                        final eventTime = _eventTimeController.text;
+                        final eventLocation = _eventLocationController.text;
+                        final eventDescription = _eventDescriptionController.text;
+
+                        print('Event Name: $eventName');
+                        print('Event Date: $eventDate');
+                        print('Event Time: $eventTime');
+                        print('Event Location: $eventLocation');
+                        print('Event Description: $eventDescription');
+
+                        _eventNameController.clear();
+                        _eventDateController.clear();
+                        _eventTimeController.clear();
+                        _eventLocationController.clear();
+                        _eventDescriptionController.clear();
+                        _selectedDate = null;
+                        _selectedTime = null;
+
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Event created successfully!')),
+                        );
+
+                        setState(() {
+                          _isLoading = false;
+                        });
+                      }
+                    },
+                    style: ElevatedButton.styleFrom(
+                      padding: const EdgeInsets.symmetric(vertical: 16.0),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                    ),
+                    child: const Text('Submit', style: TextStyle(fontSize: 16.0)),
+                  ),
+                ],
               ),
-            ],
+            ),
           ),
-        ),
+          if (_isLoading)
+            Positioned.fill(
+              child: Stack(
+                children: [
+                  // Blur effect
+                  BackdropFilter(
+                    filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
+                    child: Container(
+                      color: Color.fromARGB(255, 184, 197, 226).withOpacity(0.5),
+                    ),
+                  ),
+                  Center(
+                    child: CircularProgressIndicator(),
+                  ),
+                ],
+              ),
+            ),
+        ],
       ),
     );
   }
