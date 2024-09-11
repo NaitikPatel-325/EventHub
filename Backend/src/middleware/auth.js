@@ -12,6 +12,7 @@ async function auth(req, res, next) {
     idToken = req.headers.authorization.split('Bearer ')[1];
   }
   else{
+    console.log('No token in headers');
     return res.status(403).json({ message: 'Unauthorized' });
   }
   try {
@@ -23,7 +24,6 @@ async function auth(req, res, next) {
     console.error('Error while verifying Firebase ID token:', error);
     return res.status(403).json({ message: 'Unauthorized' });
   }
-  next();
 }
 
 export default auth;
