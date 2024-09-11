@@ -15,7 +15,7 @@ class _SignupState extends State<Signup> {
   TextEditingController password = TextEditingController();
 
   void signUp(String email, String password) async {
-    final String baseUrl = 'http://192.168.15.58:3000';
+    final String baseUrl = 'http://192.168.8.251:3000';
     print("insidesignup");
     try {
       final response = await http.post(
@@ -25,7 +25,7 @@ class _SignupState extends State<Signup> {
       );
 
       if (response.statusCode == 200) {
-        final data = jsonDecode(response.body);
+        // final data = jsonDecode(response.body);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('User created successfully!'),
