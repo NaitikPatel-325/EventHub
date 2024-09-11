@@ -19,7 +19,7 @@ class _SignupState extends State<Signup> {
     print("insidesignup");
     try {
       final response = await http.post(
-        Uri.parse('$baseUrl/signup'),
+        Uri.parse('$baseUrl/user/signup'),
         headers: <String, String>{'Content-Type': 'application/json; charset=UTF-8'},
         body: jsonEncode(<String, String>{'email': email, 'password': password}),
       );
@@ -29,15 +29,15 @@ class _SignupState extends State<Signup> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('User created successfully!'),
-            backgroundColor: Colors.green, // Color for success
+            backgroundColor: Colors.green,
           ),
         );
         Navigator.of(context).pushReplacementNamed('/login');
-      } else if (response.statusCode == 409) { // Assuming 409 Conflict for user exists
+      } else if (response.statusCode == 409) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('User already exists.'),
-            backgroundColor: Colors.red, // Color for error
+            backgroundColor: Colors.red,
           ),
         );
       } else {
@@ -45,7 +45,7 @@ class _SignupState extends State<Signup> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Failed to create user.'),
-            backgroundColor: Colors.orange, // Color for warning
+            backgroundColor: Colors.orange,
           ),
         );
       }
@@ -54,7 +54,7 @@ class _SignupState extends State<Signup> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Error during sign up.'),
-          backgroundColor: Colors.red, // Color for error
+          backgroundColor: Colors.red,
         ),
       );
     }
