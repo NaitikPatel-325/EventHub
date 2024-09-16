@@ -10,7 +10,6 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  qr_flutter: ^4.0.0
   http: ^1.2.1
   shared_preferences: ^2.0.13
   share_plus: ^10.0.0
@@ -19,8 +18,8 @@ dependencies:
   flutter_local_notifications: ^17.1.2
   image_picker: ^1.1.1
   cupertino_icons: ^1.0.6
-  firebase_core: ^3.4.0  # Ensure this works with other Firebase packages
-  firebase_auth: ^5.2.0   # These should match the `firebase_core` version
+  firebase_core: ^3.4.0  
+  firebase_auth: ^5.2.0  
   cloud_firestore: ^5.4.0 
   google_sign_in: ^6.1.1
   google_sign_in_web: ^0.12.4+2
@@ -30,6 +29,9 @@ dependencies:
   firebase_analytics: ^11.3.0  
   firebase_crashlytics: ^4.1.0 
   provider: ^6.0.5             
+  path_provider: ^2.1.4
+  qr_flutter: ^4.1.0
+  qr_code_scanner: ^1.0.1
 
 
 

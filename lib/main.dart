@@ -1,9 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:provider/provider.dart';
+import 'screens/qr/view/generateqr.dart';
 import 'auth/wrapper.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'screens/qr/view/QrOption.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'screens/createevent/view/create_Event_page.dart';
 import 'screens/register_page/view/register_page.dart';
@@ -65,6 +66,8 @@ class MyApp extends StatelessWidget {
           '/login': (context) =>  Login(),
           '/forgot': (context) =>  ForgotPasswordPage(),
           '/signout': (context) => SignOutPage(),
+          '/qr-code': (context) => QrOptionsPage(),
+          '/generate-qr': (context) => GenerateQR(),
         },
 
       );
