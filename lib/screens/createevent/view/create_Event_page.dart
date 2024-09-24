@@ -1,9 +1,5 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
-import 'package:firebase_auth/firebase_auth.dart';
-
 
 class CreateEventPage extends StatefulWidget {
   const CreateEventPage({super.key});
@@ -22,47 +18,6 @@ class _CreateEventPageState extends State<CreateEventPage> {
   DateTime? _selectedDate;
   TimeOfDay? _selectedTime;
   bool _isLoading = false;
-
-  Future<void> _createEvent() async {
-    final user = FirebaseAuth.instance.currentUser;
-    final idToken = await user?.getIdToken();
-
-    final url = Uri.parse('http://192.168.15.58:3000/user/create');
-    final headers = {
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer $idToken',
-    };
-    final body = jsonEncode({
-      'name': _eventNameController.text,
-      'date': _eventDateController.text,
-      'time': _eventTimeController.text,
-      'location': _eventLocationController.text,
-      'description': _eventDescriptionController.text,
-    });
-
-    try {
-      // print(headers);
-      final response = await http.post(url, headers: headers, body: body);
-      if (response.statusCode == 200) {
-        // print
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Event created successfully!')),
-        );
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Failed to create event')),
-        );
-      }
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Error occurred while creating event')),
-      );
-    } finally {
-      setState(() {
-        _isLoading = false;
-      });
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -136,7 +91,18 @@ class _CreateEventPageState extends State<CreateEventPage> {
                         setState(() {
                           _isLoading = true;
                         });
-                        await _createEvent();
+                        await Future.delayed(const Duration(seconds: 3));
+                        final eventName = _eventNameController.text;
+                        final eventDate = _eventDateController.text;
+                        final eventTime = _eventTimeController.text;
+                        final eventLocation = _eventLocationController.text;
+                        final eventDescription = _eventDescriptionController.text;
+
+                        print('Event Name: $eventName');
+                        print('Event Date: $eventDate');
+                        print('Event Time: $eventTime');
+                        print('Event Location: $eventLocation');
+                        print('Event Description: $eventDescription');
 
                         _eventNameController.clear();
                         _eventDateController.clear();
@@ -145,6 +111,14 @@ class _CreateEventPageState extends State<CreateEventPage> {
                         _eventDescriptionController.clear();
                         _selectedDate = null;
                         _selectedTime = null;
+
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Event created successfully!')),
+                        );
+
+                        setState(() {
+                          _isLoading = false;
+                        });
                       }
                     },
                     style: ElevatedButton.styleFrom(
@@ -163,13 +137,14 @@ class _CreateEventPageState extends State<CreateEventPage> {
             Positioned.fill(
               child: Stack(
                 children: [
+                  // Blur effect
                   BackdropFilter(
                     filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
                     child: Container(
                       color: Color.fromARGB(255, 184, 197, 226).withOpacity(0.5),
                     ),
                   ),
-                  const Center(
+                  Center(
                     child: CircularProgressIndicator(),
                   ),
                 ],

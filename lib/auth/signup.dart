@@ -15,7 +15,9 @@ class _SignupState extends State<Signup> {
   TextEditingController password = TextEditingController();
 
   void signUp(String email, String password) async {
-    final String baseUrl = 'http://192.168.15.58:3000';
+    final String baseUrl = 'http://192.168.1.147:3000';
+    // 192.168.1.147 krishna gh
+    // 192.168.15.58 vidhi
     print("insidesignup");
     try {
       final response = await http.post(
