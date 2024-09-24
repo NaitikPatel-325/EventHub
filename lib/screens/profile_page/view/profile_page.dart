@@ -28,7 +28,7 @@ class ProfilePage extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              CircleAvatar(
+              const CircleAvatar(
                 radius: 70,
                 backgroundImage: AssetImage('assets/images/image3.png'), // Example image
                 backgroundColor: Colors.white,

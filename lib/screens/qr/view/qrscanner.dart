@@ -3,6 +3,8 @@ import 'package:qr_code_scanner/qr_code_scanner.dart';
 import 'profileview.dart';
 
 class QRViewExample extends StatefulWidget {
+  const QRViewExample({super.key});
+
   @override
   State<StatefulWidget> createState() => _QRViewExampleState();
 }
@@ -16,7 +18,7 @@ class _QRViewExampleState extends State<QRViewExample> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Scan QR Code'),
+        title: const Text('Scan QR Code'),
       ),
       body: Column(
         children: <Widget>[
@@ -32,7 +34,7 @@ class _QRViewExampleState extends State<QRViewExample> {
             child: Center(
               child: (scannedData != null)
                   ? Text('Scanned: $scannedData')
-                  : Text('Scan a code'),
+                  : const Text('Scan a code'),
             ),
           )
         ],

@@ -4,6 +4,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 class SignOutPage extends StatelessWidget {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
+  SignOutPage({super.key});
+
   Future<void> _signOut(BuildContext context) async {
     try {
       await _auth.signOut();
@@ -12,7 +14,7 @@ class SignOutPage extends StatelessWidget {
       print('Error signing out: $e');
 
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
+        const SnackBar(
           content: Text('Error signing out. Please try again.'),
           backgroundColor: Colors.red,
         ),
@@ -30,12 +32,12 @@ class SignOutPage extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Icon(
+            const Icon(
               Icons.exit_to_app,
               size: 100.0,
               color: Colors.teal,
             ),
-            SizedBox(height: 30.0),
+            const SizedBox(height: 30.0),
             Text(
               'Are you sure you want to sign out?',
               textAlign: TextAlign.center,
@@ -44,17 +46,17 @@ class SignOutPage extends StatelessWidget {
                 color: Colors.grey.shade800,
               ),
             ),
-            SizedBox(height: 40.0),
+            const SizedBox(height: 40.0),
             ElevatedButton(
               onPressed: () => _signOut(context),
               style: ElevatedButton.styleFrom(
-                minimumSize: Size(double.infinity, 50),
+                minimumSize: const Size(double.infinity, 50),
                 backgroundColor: Colors.teal,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10.0),
                 ),
               ),
-              child: Text(
+              child: const Text(
                 'Sign Out',
                 style: TextStyle(
                   fontSize: 18.0,
@@ -62,17 +64,17 @@ class SignOutPage extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(height: 20.0),
+            const SizedBox(height: 20.0),
             OutlinedButton(
               onPressed: () => Navigator.of(context).pop(),
               style: OutlinedButton.styleFrom(
-                minimumSize: Size(double.infinity, 50),
-                side: BorderSide(color: Colors.teal),
+                minimumSize: const Size(double.infinity, 50),
+                side: const BorderSide(color: Colors.teal),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10.0),
                 ),
               ),
-              child: Text(
+              child: const Text(
                 'Cancel',
                 style: TextStyle(
                   fontSize: 18.0,

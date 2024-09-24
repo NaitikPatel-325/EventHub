@@ -166,7 +166,7 @@ class _CreateEventPageState extends State<CreateEventPage> {
                   BackdropFilter(
                     filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
                     child: Container(
-                      color: Color.fromARGB(255, 184, 197, 226).withOpacity(0.5),
+                      color: const Color.fromARGB(255, 184, 197, 226).withOpacity(0.5),
                     ),
                   ),
                   const Center(

@@ -11,16 +11,18 @@
   }
 
   class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
     @override
     Widget build(BuildContext context) {
-      return MaterialApp(
-        home: const Wrapper(),
+      return const MaterialApp(
+        home: Wrapper(),
       );
     }
   }
 
   class Wrapper extends StatefulWidget {
-    const Wrapper({Key? key}) : super(key: key);
+    const Wrapper({super.key});
 
     @override
     _WrapperState createState() => _WrapperState();
@@ -40,9 +42,9 @@
               return const Center(child: Text('Something went wrong!'));
             }
             else if(snapshot.hasData){
-              return HomePage();
+              return const HomePage();
             } else {
-              return Login();
+              return const Login();
             }
           },
         ),

@@ -3,11 +3,13 @@ import 'generateqr.dart';
 import 'qrscanner.dart';
 
 class QrOptionsPage extends StatelessWidget {
+  const QrOptionsPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('QR Code Options'),
+        title: const Text('QR Code Options'),
         backgroundColor: Colors.indigo[900],
       ),
       body: Center(
@@ -23,14 +25,14 @@ class QrOptionsPage extends StatelessWidget {
                   ),
                 );
               },
-              child: Text('Generate QR Code'),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.indigo[900],
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                textStyle: TextStyle(fontSize: 16),
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                textStyle: const TextStyle(fontSize: 16),
               ),
+              child: Text('Generate QR Code'),
             ),
-            SizedBox(height: 20),
+            const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
                 Navigator.push(
@@ -40,12 +42,12 @@ class QrOptionsPage extends StatelessWidget {
                   ),
                 );
               },
-              child: Text('Scan QR Code'),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.indigo[900],
-                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-                textStyle: TextStyle(fontSize: 16),
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+                textStyle: const TextStyle(fontSize: 16),
               ),
+              child: Text('Scan QR Code'),
             ),
           ],
         ),

@@ -5,21 +5,21 @@ import 'dart:convert';
 class ProfilePage extends StatelessWidget {
   final String profileId;
 
-  ProfilePage({required this.profileId});
+  const ProfilePage({super.key, required this.profileId});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Profile Details"),
+        title: const Text("Profile Details"),
       ),
       body: FutureBuilder(
         future: _fetchProfileData(profileId), 
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           } else if (snapshot.hasError) {
-            return Center(child: Text("Error fetching data"));
+            return const Center(child: Text("Error fetching data"));
           } else if (snapshot.hasData) {
             var profileData = snapshot.data as Map<String, dynamic>;
             return Column(
@@ -30,7 +30,7 @@ class ProfilePage extends StatelessWidget {
               ],
             );
           } else {
-            return Center(child: Text("No data found"));
+            return const Center(child: Text("No data found"));
           }
         },
       ),

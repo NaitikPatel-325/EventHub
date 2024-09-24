@@ -15,8 +15,8 @@ class RegisterPage extends StatelessWidget {
           },
         ),
       ),
-      body: Center(
-        child: const Text('Registration form will go here.'),
+      body: const Center(
+        child: Text('Registration form will go here.'),
       ),
     );
   }
