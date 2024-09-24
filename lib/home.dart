@@ -85,7 +85,6 @@ class _HomePageState extends State<HomePage> {
           items: const [
             BottomNavigationBarItem(icon: Icon(Icons.event), label: 'Create Event'),
             BottomNavigationBarItem(icon: Icon(Icons.person_add), label: 'Register'),
-            BottomNavigationBarItem(icon: Icon(Icons.qr_code_scanner), label: 'QR Code'),
           ],
           selectedItemColor: Colors.blue,
           unselectedItemColor: Colors.blue,
