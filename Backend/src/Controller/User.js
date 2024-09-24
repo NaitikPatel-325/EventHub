@@ -4,7 +4,7 @@ import admin from '../Utils/firebase.js';
 
 const register =  async (req, res) => {
     const { email, password } = req.body;
-    // console.log(email,password);
+     console.log(email,password);
     try {
         const existingUser = await admin.auth().getUserByEmail(email);
         if (existingUser) {

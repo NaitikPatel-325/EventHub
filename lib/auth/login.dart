@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-// import 'package:google_sign_in/google_sign_in.dart';
 
 class Login extends StatefulWidget {
-  const Login({Key? key}) : super(key: key);
+  const Login({super.key});
 
   @override
   _LoginState createState() => _LoginState();
@@ -26,7 +25,7 @@ class _LoginState extends State<Login> {
       Navigator.of(context).pushReplacementNamed('/home');
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(
+        const SnackBar(content: Text(
             'Failed to sign in: You may have entered an incorrect email or password or the account does not exist.'
         )),
       );

@@ -34,20 +34,18 @@ class _RegisterPageState extends State<RegisterPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Registered Events')),
-      body: _events.isEmpty
-          ? const Center(child: CircularProgressIndicator())
-          : ListView.builder(
-              itemCount: _events.length,
-              itemBuilder: (context, index) {
-                final event = _events[index];
-                return ListTile(
-                  title: Text(event['eventName'] ?? 'Unnamed Event'),
-                  subtitle: Text('Location: ${event['eventLocation']}'),
-                  trailing: Text('Date: ${event['eventDate']}, Time: ${event['eventTime']}'),
-                );
-              },
-            ),
+      appBar: AppBar(
+        title: const Text('Register for Events'),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+      ),
+      body: const Center(
+        child: Text('Registration form will go here.'),
+      ),
     );
   }
 }

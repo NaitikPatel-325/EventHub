@@ -15,8 +15,8 @@ class LiveUpdatesPage extends StatelessWidget {
           },
         ),
       ),
-      body: Center(
-        child: const Text('Live updates will be displayed here.'),
+      body: const Center(
+        child: Text('Live updates will be displayed here.'),
       ),
     );
   }
