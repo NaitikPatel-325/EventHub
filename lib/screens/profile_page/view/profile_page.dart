@@ -1,7 +1,10 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -12,6 +15,8 @@ class ProfilePage extends StatefulWidget {
 
 class _ProfilePageState extends State<ProfilePage> {
   final _emailController = TextEditingController();
+  final ImagePicker _picker = ImagePicker();
+  String? _profileImageUrl;
   bool _isLoading = true;
 
   @override
@@ -24,7 +29,7 @@ class _ProfilePageState extends State<ProfilePage> {
     final user = FirebaseAuth.instance.currentUser;
     final idToken = await user?.getIdToken();
 
-    final url = Uri.parse('http://192.168.32.58:3000/user/profile'); 
+    final url = Uri.parse('http://192.168.1.147:3000/user/profile'); 
     final headers = {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer $idToken',
@@ -36,6 +41,7 @@ class _ProfilePageState extends State<ProfilePage> {
         final profileData = jsonDecode(response.body);
         setState(() {
           _emailController.text = profileData['email'];
+          _profileImageUrl = profileData['profileImageUrl']; // Assuming your backend returns the profile image URL
           _isLoading = false;
         });
       } else {
@@ -46,6 +52,54 @@ class _ProfilePageState extends State<ProfilePage> {
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Error occurred while fetching profile')),
+      );
+    }
+  }
+
+  Future<void> _pickImage() async {
+    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      _uploadImageToFirebase(File(pickedFile.path));
+    }
+  }
+
+  Future<void> _uploadImageToFirebase(File imageFile) async {
+    try {
+      // Upload image to Firebase Storage
+      final storageRef = FirebaseStorage.instance.ref().child('profile_pics/${FirebaseAuth.instance.currentUser!.uid}.jpg');
+      await storageRef.putFile(imageFile);
+      // Get the download URL
+      final downloadUrl = await storageRef.getDownloadURL();
+      // Update the profile image URL in your database
+      _updateProfileImageUrl(downloadUrl);
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Error occurred while uploading image')),
+      );
+    }
+  }
+
+  Future<void> _updateProfileImageUrl(String downloadUrl) async {
+    final user = FirebaseAuth.instance.currentUser;
+    final idToken = await user?.getIdToken();
+
+    final url = Uri.parse('http://192.168.1.147:3000/user/updateProfile'); 
+    final headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $idToken',
+    };
+
+    try {
+      await http.patch(url, headers: headers, body: jsonEncode({'profileImageUrl': downloadUrl}));
+      setState(() {
+        _profileImageUrl = downloadUrl; // Update the local variable
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Profile image updated successfully!')),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Error updating profile image')),
       );
     }
   }
@@ -76,15 +130,23 @@ class _ProfilePageState extends State<ProfilePage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
+                  GestureDetector(
+                    onTap: _pickImage,
+                    child: CircleAvatar(
+                      radius: 50,
+                      backgroundImage: _profileImageUrl != null ? NetworkImage(_profileImageUrl!) : null,
+                      child: _profileImageUrl == null ? const Icon(Icons.add_a_photo, size: 50) : null,
+                    ),
+                  ),
+                  const SizedBox(height: 16.0),
                   _buildTextField(
                     controller: _emailController,
                     label: 'Email',
                     hintText: 'Enter your email',
                     icon: Icons.email,
-                    isReadOnly: true,  // Email is readonly for now
+                    isReadOnly: true,  // Email is read-only for now
                   ),
                   const SizedBox(height: 16.0),
-                  // Placeholder for future fields
                   const Text('More profile details coming soon...', style: TextStyle(fontStyle: FontStyle.italic)),
                 ],
               ),
