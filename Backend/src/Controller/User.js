@@ -1,10 +1,11 @@
 
 import admin from '../Utils/firebase.js';
 
-
-const register =  async (req, res) => {
-    const { email, password } = req.body;
-     console.log(email,password);
+const register = async (req, res) => {
+    const { email, password, username, phone } = req.body; // Destructure new fields
+    const profileImage = req.file; // Get the uploaded file
+    console.log(email, password, username, phone);
+    
     try {
         const existingUser = await admin.auth().getUserByEmail(email);
         if (existingUser) {
@@ -16,18 +17,41 @@ const register =  async (req, res) => {
             return res.status(500).send('Internal Server Error');
         }
     }
-  
+
     try {
+        // Create a new user in Firebase Auth
         const userRecord = await admin.auth().createUser({
             email: email,
             password: password,
         });
-  
+
         const db = admin.database();
-        await db.ref('users/' + userRecord.uid).set({
+
+        // Define the user data
+        const userData = {
             email: email,
+            username: username, // Save username
+            phone: phone,       // Save phone number
             createdAt: new Date().toISOString()
-        });
+        };
+
+        // Check if there's a profile image and store it
+        if (profileImage) {
+            // Assuming you are using a file storage service like Firebase Storage
+            const bucket = admin.storage().bucket(); // Initialize your storage bucket
+            const fileName = `profile_images/${userRecord.uid}.${profileImage.mimetype.split('/')[1]}`; // Generate a file name
+            await bucket.upload(profileImage.path, {
+                destination: fileName,
+                metadata: {
+                    contentType: profileImage.mimetype,
+                },
+            });
+            userData.profileImageUrl = `gs://${bucket.name}/${fileName}`; // Get the URL for the uploaded file
+        }
+
+        // Save user information to the Realtime Database
+        await db.ref('users/' + userRecord.uid).set(userData);
+        
         console.log('User created successfully');
         res.json({ message: 'User created successfully', uid: userRecord.uid });
     } catch (error) {
@@ -35,6 +59,8 @@ const register =  async (req, res) => {
         res.status(400).send(error.message);
     }
 };
+
+
   
 const createevent = async (req, res) => {
     console.log(req.body, req.user);
