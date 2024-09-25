@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'dart:html' as html; // Import for web file handling
 
 class Signup extends StatefulWidget {
   const Signup({super.key});
@@ -11,61 +10,27 @@ class Signup extends StatefulWidget {
 }
 
 class _SignupState extends State<Signup> {
-  TextEditingController email = TextEditingController();
-  TextEditingController password = TextEditingController();
-  TextEditingController username = TextEditingController();
-  TextEditingController phone = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  TextEditingController usernameController = TextEditingController();
+  TextEditingController phoneController = TextEditingController();
   
-  // For handling uploaded image
-  html.File? _profileImage;
-  String? _imageUrl; // To store the uploaded image URL
-
-  void _pickImage() {
-    html.FileUploadInputElement uploadInput = html.FileUploadInputElement();
-    uploadInput.accept = 'image/png,image/jpeg';
-    uploadInput.click();
-
-    uploadInput.onChange.listen((e) {
-      final files = uploadInput.files;
-      if (files!.isEmpty) return;
-
-      setState(() {
-        _profileImage = files[0];
-      });
-
-      // Create a URL for the selected image file
-      final reader = html.FileReader();
-      reader.readAsDataUrl(_profileImage!);
-      reader.onLoadEnd.listen((e) {
-        setState(() {
-          _imageUrl = reader.result as String?;
-        });
-      });
-    });
-  }
+  bool isAgreedToTerms = false; // Checkbox for terms and conditions
 
   void signUp(String email, String password, String username, String phone) async {
     final String baseUrl = 'http://192.168.1.147:3000';
-    
-    // Prepare form data for image upload
-    var request = http.MultipartRequest('POST', Uri.parse('$baseUrl/user/signup'));
-    request.fields['email'] = email;
-    request.fields['password'] = password;
-    request.fields['username'] = username;
-    request.fields['phone'] = phone;
-
-    // Add the image file if it's selected
-    if (_profileImage != null) {
-      request.files.add(
-        await http.MultipartFile.fromPath(
-          'profile_image',
-          _profileImage!.relativePath!,
-        ),
-      );
-    }
-
+    print("insidesignup");
     try {
-      final response = await request.send();
+      final response = await http.post(
+        Uri.parse('$baseUrl/user/signup'),
+        headers: <String, String>{'Content-Type': 'application/json; charset=UTF-8'},
+        body: jsonEncode(<String, String>{
+          'email': email,
+          'password': password,
+          'username': username,
+          'phone': phone,
+        }),
+      );
 
       if (response.statusCode == 200) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -83,7 +48,7 @@ class _SignupState extends State<Signup> {
           ),
         );
       } else {
-        print('Failed to create user: ${response.reasonPhrase}');
+        print('Failed to create user: ${response.body}');
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Failed to create user.'),
@@ -143,8 +108,23 @@ class _SignupState extends State<Signup> {
               ),
             ),
             const SizedBox(height: 40.0),
+            
+            // Username Field
             TextField(
-              controller: email,
+              controller: usernameController,
+              decoration: InputDecoration(
+                prefixIcon: const Icon(Icons.person, color: Colors.teal),
+                hintText: 'Username',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+              ),
+            ),
+            const SizedBox(height: 20.0),
+
+            // Email Field
+            TextField(
+              controller: emailController,
               keyboardType: TextInputType.emailAddress,
               decoration: InputDecoration(
                 prefixIcon: const Icon(Icons.email, color: Colors.teal),
@@ -155,8 +135,10 @@ class _SignupState extends State<Signup> {
               ),
             ),
             const SizedBox(height: 20.0),
+
+            // Password Field
             TextField(
-              controller: password,
+              controller: passwordController,
               obscureText: true,
               decoration: InputDecoration(
                 prefixIcon: const Icon(Icons.lock, color: Colors.teal),
@@ -167,58 +149,59 @@ class _SignupState extends State<Signup> {
               ),
             ),
             const SizedBox(height: 20.0),
-            TextField(
-              controller: username,
-              decoration: InputDecoration(
-                prefixIcon: const Icon(Icons.person, color: Colors.teal),
-                hintText: 'Username',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-              ),
+
+            // Phone Number Field
+            // Phone Number Field
+TextField(
+  controller: phoneController,
+  keyboardType: TextInputType.phone,
+  decoration: InputDecoration(
+    prefixIcon: const Icon(Icons.phone, color: Colors.teal),
+    hintText: 'Phone Number (+country code)',
+    border: OutlineInputBorder(
+      borderRadius: BorderRadius.circular(10.0),
+    ),
+  ),
+  onChanged: (value) {
+    // Optional: Automatically format the phone number
+    if (!value.startsWith('+')) {
+      phoneController.text = '+${value.replaceAll(RegExp(r'[^0-9]'), '')}';
+      phoneController.selection = TextSelection.fromPosition(TextPosition(offset: phoneController.text.length));
+    }
+  },
+),
+
+
+            // Terms and Conditions Checkbox
+            CheckboxListTile(
+              title: const Text("I agree to the Terms and Conditions"),
+              value: isAgreedToTerms,
+              onChanged: (bool? value) {
+                setState(() {
+                  isAgreedToTerms = value!;
+                });
+              },
             ),
-            const SizedBox(height: 20.0),
-            TextField(
-              controller: phone,
-              keyboardType: TextInputType.phone,
-              decoration: InputDecoration(
-                prefixIcon: const Icon(Icons.phone, color: Colors.teal),
-                hintText: 'Phone Number',
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-              ),
-            ),
-            const SizedBox(height: 20.0),
-            // Display uploaded image
-            if (_imageUrl != null)
-              Padding(
-                padding: const EdgeInsets.only(bottom: 20.0),
-                child: Image.network(_imageUrl!, height: 100),
-              ),
+
+            // Sign Up Button
             ElevatedButton(
               onPressed: () {
-                _pickImage(); // Open image picker
+                if (isAgreedToTerms) {
+                  signUp(
+                    emailController.text,
+                    passwordController.text,
+                    usernameController.text,
+                    phoneController.text,
+                  );
+                } else {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Please agree to the Terms and Conditions.'),
+                      backgroundColor: Colors.red,
+                    ),
+                  );
+                }
               },
-              style: ElevatedButton.styleFrom(
-                minimumSize: const Size(double.infinity, 50),
-                backgroundColor: Colors.teal,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(10.0),
-                ),
-              ),
-              child: const Text(
-                'Upload Profile Image',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 18.0,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-            ),
-            const SizedBox(height: 20.0),
-            ElevatedButton(
-              onPressed: () => signUp(email.text, password.text, username.text, phone.text),
               style: ElevatedButton.styleFrom(
                 minimumSize: const Size(double.infinity, 50),
                 backgroundColor: Colors.teal,
@@ -236,6 +219,8 @@ class _SignupState extends State<Signup> {
               ),
             ),
             const SizedBox(height: 20.0),
+
+            // Redirect to Login Page
             Center(
               child: TextButton(
                 onPressed: () => Navigator.of(context).pushNamed('/login'),

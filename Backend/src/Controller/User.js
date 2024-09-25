@@ -2,64 +2,47 @@
 import admin from '../Utils/firebase.js';
 
 const register = async (req, res) => {
-    const { email, password, username, phone } = req.body; // Destructure new fields
-    const profileImage = req.file; // Get the uploaded file
+    const { email, password, username, phone } = req.body;
     console.log(email, password, username, phone);
-    
+
     try {
+        // Check if user already exists by email
         const existingUser = await admin.auth().getUserByEmail(email);
         if (existingUser) {
             return res.status(409).send('User already exists.');
         }
     } catch (error) {
         if (error.code !== 'auth/user-not-found') {
-            console.log(error);
+            console.log('Error fetching user by email:', error);
             return res.status(500).send('Internal Server Error');
         }
     }
 
     try {
-        // Create a new user in Firebase Auth
+        // Create user in Firebase Authentication
         const userRecord = await admin.auth().createUser({
             email: email,
             password: password,
+            phoneNumber: phone // Ensure phone number is in correct format
         });
 
+        // Store additional fields in Firebase Realtime Database
         const db = admin.database();
-
-        // Define the user data
-        const userData = {
+        await db.ref('users/' + userRecord.uid).set({
             email: email,
             username: username, // Save username
-            phone: phone,       // Save phone number
+            phone: phone, // Save phone number
             createdAt: new Date().toISOString()
-        };
+        });
 
-        // Check if there's a profile image and store it
-        if (profileImage) {
-            // Assuming you are using a file storage service like Firebase Storage
-            const bucket = admin.storage().bucket(); // Initialize your storage bucket
-            const fileName = `profile_images/${userRecord.uid}.${profileImage.mimetype.split('/')[1]}`; // Generate a file name
-            await bucket.upload(profileImage.path, {
-                destination: fileName,
-                metadata: {
-                    contentType: profileImage.mimetype,
-                },
-            });
-            userData.profileImageUrl = `gs://${bucket.name}/${fileName}`; // Get the URL for the uploaded file
-        }
-
-        // Save user information to the Realtime Database
-        await db.ref('users/' + userRecord.uid).set(userData);
-        
         console.log('User created successfully');
         res.json({ message: 'User created successfully', uid: userRecord.uid });
     } catch (error) {
-        console.log(error);
-        res.status(400).send(error.message);
+        // Log the complete error object for debugging
+        console.log('Error creating user:', JSON.stringify(error));
+        res.status(400).send(`Failed to create user: ${error.message}`);
     }
 };
-
 
   
 const createevent = async (req, res) => {
