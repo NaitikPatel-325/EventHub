@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'package:eventhub/screens/register_page/view/registerdetails.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:firebase_auth/firebase_auth.dart';
@@ -26,7 +25,7 @@ class _EventListPageState extends State<EventListPage> {
     final user = FirebaseAuth.instance.currentUser;
     final idToken = await user?.getIdToken();
 
-    final url = Uri.parse('http://192.168.1.147:3000/user/allevent');
+    final url = Uri.parse('http://192.168.32.58:3000/user/allevent');
     final headers = {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer $idToken',
@@ -57,26 +56,26 @@ class _EventListPageState extends State<EventListPage> {
   }
 
   void _openMap(String location) async {
-  final Uri mapUrl = Uri.parse('https://www.google.com/maps/search/?api=1&query=$location');
-  if (await canLaunchUrl(mapUrl)) {
-    await launchUrl(mapUrl);
-  } else {
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Could not open map')),
-    );
+    final Uri mapUrl = Uri.parse('https://www.google.com/maps/search/?api=1&query=$location');
+    if (await canLaunchUrl(mapUrl)) {
+      await launchUrl(mapUrl);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Could not open map')),
+      );
+    }
   }
-}
-
 
   Future<void> _registerForEvent(String eventId) async {
     final user = FirebaseAuth.instance.currentUser;
     final idToken = await user?.getIdToken();
 
-    final url = Uri.parse('http://192.168.1.147:3000/user/register');
+    final url = Uri.parse('http://192.168.32.58:3000/user/eventregister');
     final headers = {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer $idToken',
     };
+    print(eventId);
     final body = jsonEncode({
       'eventId': eventId,
       'userId': user?.uid,
@@ -84,6 +83,7 @@ class _EventListPageState extends State<EventListPage> {
 
     try {
       final response = await http.post(url, headers: headers, body: body);
+      print(response.body);
       if (response.statusCode == 200) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Registered successfully!')),
@@ -98,6 +98,33 @@ class _EventListPageState extends State<EventListPage> {
         const SnackBar(content: Text('Error occurred during registration')),
       );
     }
+  }
+
+  void _confirmRegistration(String eventId) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Confirm Registration'),
+          content: const Text('Are you sure you want to register for this event?'),
+          actions: [
+            TextButton(
+              child: const Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop(); 
+              },
+            ),
+            TextButton(
+              child: const Text('Yes'),
+              onPressed: () {
+                Navigator.of(context).pop();
+                _registerForEvent(eventId); 
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -120,90 +147,83 @@ class _EventListPageState extends State<EventListPage> {
               : ListView.builder(
                   itemCount: _events.length,
                   itemBuilder: (context, index) {
-                    final event = _events[index];
-                    return GestureDetector(
-                      onTap: () => _registerForEvent(event['id']),
-                      child: Card(
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-                        margin: const EdgeInsets.symmetric(vertical: 15, horizontal: 25),
-                        elevation: 10,
-                        child: Container(
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              colors: [Colors.deepPurple, Colors.deepPurpleAccent],
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                            ),
-                            borderRadius: BorderRadius.circular(20),
+                  final event = _events[index];
+                  return GestureDetector(
+                    onTap: () => _confirmRegistration(event['id'] ?? ''), 
+                    child: Card(
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+                      margin: const EdgeInsets.symmetric(vertical: 15, horizontal: 25),
+                      elevation: 10,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [Colors.deepPurple, Colors.deepPurpleAccent],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
                           ),
-                          padding: const EdgeInsets.all(20),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                event['name'],
-                                style: const TextStyle(
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.bold,
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        padding: const EdgeInsets.all(20),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              event['name'] ?? 'No name available', 
+                              style: const TextStyle(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.white,
+                              ),
+                            ),
+                            const SizedBox(height: 10),
+                            Row(
+                              children: [
+                                const Icon(Icons.date_range, color: Colors.white70),
+                                const SizedBox(width: 10),
+                                Text(
+                                  'Date: ${event['date'] ?? 'Unknown'}', 
+                                  style: const TextStyle(fontSize: 16, color: Colors.white70),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 8),
+                            Row(
+                              children: [
+                                const Icon(Icons.access_time, color: Colors.white70),
+                                const SizedBox(width: 10),
+                                Text(
+                                  'Time: ${event['time'] ?? 'Unknown'}', 
+                                  style: const TextStyle(fontSize: 16, color: Colors.white70),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 8),
+                            Row(
+                              children: [
+                                const Icon(Icons.location_pin, color: Colors.white70),
+                                const SizedBox(width: 10),
+                                Text(
+                                  'Location: ${event['location'] ?? 'Unknown'}',
+                                  style: const TextStyle(fontSize: 16, color: Colors.white70),
+                                ),
+                                IconButton(
+                                  icon: const Icon(Icons.map),
+                                  onPressed: () => _openMap(event['location'] ?? 'Unknown'),
+                                  tooltip: 'View on Map',
                                   color: Colors.white,
                                 ),
-                              ),
-                              const SizedBox(height: 10),
-                              Row(
-                                children: [
-                                  const Icon(Icons.date_range, color: Colors.white70),
-                                  const SizedBox(width: 10),
-                                  Text(
-                                    'Date: ${event['date']}',
-                                    style: const TextStyle(fontSize: 16, color: Colors.white70),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 8),
-                              Row(
-                                children: [
-                                  const Icon(Icons.access_time, color: Colors.white70),
-                                  const SizedBox(width: 10),
-                                  Text(
-                                    'Time: ${event['time']}',
-                                    style: const TextStyle(fontSize: 16, color: Colors.white70),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: 8),
-                              Row(
-                                children: [
-                                  const Icon(Icons.location_pin, color: Colors.white70),
-                                  const SizedBox(width: 10),
-                                  Text(
-                                    'Location: ${event['location']}',
-                                    style: const TextStyle(fontSize: 16, color: Colors.white70),
-                                  ),
-                                  IconButton(
-                                      icon: const Icon(Icons.map),
-                                      onPressed: () => _openMap(event['location']),
-                                      tooltip: 'View on Map',
-                                      color: Colors.white,
-                                    ),
-                                ],
-                              ),
-                              const SizedBox(height: 15),
-                              Text(
-                                event['description'],
-                                style: const TextStyle(fontSize: 14, color: Colors.white60),
-                              ),
-                              const SizedBox(height: 20),
-                              Align(
-                                alignment: Alignment.centerRight,
-                                child: ElevatedButton(
-                                onPressed: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (context) => RegisterPage(eventId: event['id']), // Navigate to the form page
-                                    ),
-                                  );
-                                },
+                              ],
+                            ),
+                            const SizedBox(height: 15),
+                            Text(
+                              event['description'] ?? 'No description available',
+                              style: const TextStyle(fontSize: 14, color: Colors.white60),
+                            ),
+                            const SizedBox(height: 20),
+                            Align(
+                              alignment: Alignment.centerRight,
+                              child: ElevatedButton(
+                                onPressed: () => _confirmRegistration(event['eventId'] ?? ''),
                                 style: ElevatedButton.styleFrom(
                                   padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 12),
                                   backgroundColor: Colors.white,
@@ -213,14 +233,13 @@ class _EventListPageState extends State<EventListPage> {
                                 ),
                                 child: const Text('Register', style: TextStyle(fontSize: 16)),
                               ),
-                              ),
-                            ],
-                          ),
+                            ),
+                          ],
                         ),
                       ),
-                    );
-                  },
-                ),
+                    ),
+                  );
+                }),
     );
   }
 }

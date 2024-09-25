@@ -27,7 +27,7 @@ class _CreateEventPageState extends State<CreateEventPage> {
     final user = FirebaseAuth.instance.currentUser;
     final idToken = await user?.getIdToken();
 
-    final url = Uri.parse('http://192.168.1.147:3000/user/create');
+    final url = Uri.parse('http://192.168.32.58:3000/user/create');
     final headers = {
      'Content-Type': 'application/json',
       'Authorization': 'Bearer $idToken',
@@ -41,10 +41,8 @@ class _CreateEventPageState extends State<CreateEventPage> {
     });
 
     try {
-      // print(headers);
       final response = await http.post(url, headers: headers, body: body);
       if (response.statusCode == 200) {
-        // print
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Event created successfully!')),
         );

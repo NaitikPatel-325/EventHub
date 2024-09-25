@@ -6,7 +6,6 @@ const register = async (req, res) => {
     console.log(email, password, username, phone);
 
     try {
-        // Check if user already exists by email
         const existingUser = await admin.auth().getUserByEmail(email);
         if (existingUser) {
             return res.status(409).send('User already exists.');
@@ -19,26 +18,23 @@ const register = async (req, res) => {
     }
 
     try {
-        // Create user in Firebase Authentication
         const userRecord = await admin.auth().createUser({
             email: email,
             password: password,
-            phoneNumber: phone // Ensure phone number is in correct format
+            phoneNumber: phone 
         });
 
-        // Store additional fields in Firebase Realtime Database
         const db = admin.database();
         await db.ref('users/' + userRecord.uid).set({
             email: email,
-            username: username, // Save username
-            phone: phone, // Save phone number
+            username: username, 
+            phone: phone, 
             createdAt: new Date().toISOString()
         });
 
         console.log('User created successfully');
         res.json({ message: 'User created successfully', uid: userRecord.uid });
     } catch (error) {
-        // Log the complete error object for debugging
         console.log('Error creating user:', JSON.stringify(error));
         res.status(400).send(`Failed to create user: ${error.message}`);
     }
@@ -118,19 +114,80 @@ const getAllEvents = async (req, res) => {
 
 const profile = async (req, res) => {
     try {
-      const userId = req.user.uid;
-  
-      const userRecord = await admin.auth().getUser(userId);
-  
-  
-      res.status(200).json({
-        email: userRecord.email,
-      });
+        const userId = req.user.uid; 
+        const userRecord = await admin.auth().getUser(userId);
+        console.log('User record:', userRecord);
+
+        const userProfileSnapshot = await admin.database().ref(`users/${userId}`).once('value');
+
+        if (!userProfileSnapshot.exists()) {
+            console.error('User profile not found');
+            return res.status(404).json({ message: 'User profile not found' });
+        }
+
+        const userProfile = userProfileSnapshot.val();
+
+        res.status(200).json({
+            email: userRecord.email,
+            phone: userRecord.phoneNumber,
+            username: userProfile.username,
+        });
     } catch (error) {
-      console.error('Error fetching user profile:', error);
-      res.status(500).json({ message: 'Error fetching profile' });
+        console.error('Error fetching user profile:', error);
+        res.status(500).json({ message: 'Error fetching profile' });
     }
-  };
+};
 
 
-export {register,createevent,getAllEvents,profile};
+const eventregister = async (req, res) => {
+    console.log("event register");
+    const { eventId } = req.body;
+
+    if (!req.user || !req.user.uid) {
+        console.log('Invalid user token or uid is missing.');
+        return res.status(400).json({ message: 'Invalid user token or uid is missing.' });
+    }
+
+    if (!eventId) {
+        console.log('Event ID is required.');
+        return res.status(400).json({ message: 'Event ID is required.' });
+    }
+
+    try {
+        const db = admin.database();
+        
+        const eventUserRef = db.ref('event_user');
+
+        const userSnapshot = await eventUserRef.orderByChild('eventId').equalTo(eventId).once('value');
+        const registeredUsers = userSnapshot.val();
+        
+            if (registeredUsers) {
+                const alreadyRegistered = Object.values(registeredUsers).some(registration => registration.userId === req.user.uid);
+            
+                if (alreadyRegistered) {
+                    console.log('User already registered for this event.');
+                    return res.status(409).json({ message: 'User already registered for this event.' });
+                }
+            }
+
+            const newEventUserRef = eventUserRef.push();
+            await newEventUserRef.set({
+                eventId: eventId,
+                userId: req.user.uid,
+                registrationDate: new Date().toISOString(),
+            });
+
+            console.log('Registered successfully and event_user record created.');
+            return res.status(200).json({ message: 'Registered successfully!', eventId });
+        } 
+        catch (error) {
+            console.log('Error:', error);
+            if (!res.headersSent) {
+                return res.status(500).send(error.message);
+            } else {
+                console.error('Headers already sent:', error);
+            }
+        }
+};
+
+export {register,createevent,getAllEvents,profile,eventregister};

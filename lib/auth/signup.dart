@@ -15,10 +15,10 @@ class _SignupState extends State<Signup> {
   TextEditingController usernameController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
   
-  bool isAgreedToTerms = false; // Checkbox for terms and conditions
+  bool isAgreedToTerms = false; 
 
   void signUp(String email, String password, String username, String phone) async {
-    final String baseUrl = 'http://192.168.1.147:3000';
+    final String baseUrl = 'http://192.168.32.58:3000';
     print("insidesignup");
     try {
       final response = await http.post(
@@ -109,7 +109,6 @@ class _SignupState extends State<Signup> {
             ),
             const SizedBox(height: 40.0),
             
-            // Username Field
             TextField(
               controller: usernameController,
               decoration: InputDecoration(
@@ -122,7 +121,6 @@ class _SignupState extends State<Signup> {
             ),
             const SizedBox(height: 20.0),
 
-            // Email Field
             TextField(
               controller: emailController,
               keyboardType: TextInputType.emailAddress,
@@ -136,7 +134,6 @@ class _SignupState extends State<Signup> {
             ),
             const SizedBox(height: 20.0),
 
-            // Password Field
             TextField(
               controller: passwordController,
               obscureText: true,
@@ -150,29 +147,26 @@ class _SignupState extends State<Signup> {
             ),
             const SizedBox(height: 20.0),
 
-            // Phone Number Field
-            // Phone Number Field
-TextField(
-  controller: phoneController,
-  keyboardType: TextInputType.phone,
-  decoration: InputDecoration(
-    prefixIcon: const Icon(Icons.phone, color: Colors.teal),
-    hintText: 'Phone Number (+country code)',
-    border: OutlineInputBorder(
-      borderRadius: BorderRadius.circular(10.0),
-    ),
-  ),
-  onChanged: (value) {
-    // Optional: Automatically format the phone number
-    if (!value.startsWith('+')) {
-      phoneController.text = '+${value.replaceAll(RegExp(r'[^0-9]'), '')}';
-      phoneController.selection = TextSelection.fromPosition(TextPosition(offset: phoneController.text.length));
-    }
-  },
-),
+            TextField(
+              controller: phoneController,
+              keyboardType: TextInputType.phone,
+              decoration: InputDecoration(
+                prefixIcon: const Icon(Icons.phone, color: Colors.teal),
+                hintText: 'Phone Number (+country code)',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10.0),
+                ),
+              ),
+              onChanged: (value) {
+                // Optional: Automatically format the phone number
+                if (!value.startsWith('+')) {
+                  phoneController.text = '+${value.replaceAll(RegExp(r'[^0-9]'), '')}';
+                  phoneController.selection = TextSelection.fromPosition(TextPosition(offset: phoneController.text.length));
+                }
+              },
+            ),
 
 
-            // Terms and Conditions Checkbox
             CheckboxListTile(
               title: const Text("I agree to the Terms and Conditions"),
               value: isAgreedToTerms,
@@ -183,7 +177,6 @@ TextField(
               },
             ),
 
-            // Sign Up Button
             ElevatedButton(
               onPressed: () {
                 if (isAgreedToTerms) {
@@ -220,7 +213,6 @@ TextField(
             ),
             const SizedBox(height: 20.0),
 
-            // Redirect to Login Page
             Center(
               child: TextButton(
                 onPressed: () => Navigator.of(context).pushNamed('/login'),

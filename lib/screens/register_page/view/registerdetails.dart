@@ -53,7 +53,7 @@ class RegisterPage extends StatelessWidget {
                 const SizedBox(height: 30),
                 ElevatedButton(
                   onPressed: () {
-                    Navigator.of(context).pushNamed('/eventsList'); // Assuming you have a named route for the events list
+                    Navigator.of(context).pushNamed('/eventsList'); 
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.blue,

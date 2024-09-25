@@ -1,4 +1,3 @@
-// feedback_page.dart
 import 'package:flutter/material.dart';
 
 class FeedbackPage extends StatelessWidget {
@@ -29,7 +28,6 @@ class FeedbackPage extends StatelessWidget {
             const SizedBox(height: 16),
             ElevatedButton(
               onPressed: () {
-                // Handle feedback submission
               },
               child: const Text('Submit'),
             ),
