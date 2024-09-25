@@ -77,6 +77,51 @@ const createevent = async (req, res) => {
     }
 };
 
+const getAllEvents = async (req, res) => {
+    console.log("get all events");  
+    try {
+        const db = admin.database();
+        const eventsRef = db.ref('events');
+
+        const snapshot = await eventsRef.once('value');
+        const events = snapshot.val();
+
+        if (!events) {
+            return res.status(404).json({ message: 'No events found.' });
+        }
+        const eventsArray = Object.keys(events).map(eventId => ({
+            eventId,
+            ...events[eventId]
+        }));
+
+        console.log('Events fetched successfully');
+        res.status(200).json(eventsArray);
+    } catch (error) {
+        console.log('Error:', error);
+        if (!res.headersSent) {
+            return res.status(500).json({ message: 'Error fetching events.', error: error.message });
+        } else {
+            console.error('Headers already sent:', error);
+        }
+    }
+};
 
 
-export {register,createevent};
+const profile = async (req, res) => {
+    try {
+      const userId = req.user.uid;
+  
+      const userRecord = await admin.auth().getUser(userId);
+  
+  
+      res.status(200).json({
+        email: userRecord.email,
+      });
+    } catch (error) {
+      console.error('Error fetching user profile:', error);
+      res.status(500).json({ message: 'Error fetching profile' });
+    }
+  };
+
+
+export {register,createevent,getAllEvents,profile};

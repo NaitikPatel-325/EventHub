@@ -1,139 +1,114 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:firebase_auth/firebase_auth.dart';
 
 class ProfilePage extends StatefulWidget {
+  const ProfilePage({super.key});
+
   @override
   _ProfilePageState createState() => _ProfilePageState();
 }
 
 class _ProfilePageState extends State<ProfilePage> {
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  User? user;
-  final _formKey = GlobalKey<FormState>();
-  TextEditingController _emailController = TextEditingController();
+  final _emailController = TextEditingController();
+  bool _isLoading = true;
 
   @override
   void initState() {
     super.initState();
-    user = _auth.currentUser; // Get the current user
-    if (user != null) {
-      _emailController.text = user!.email!; // Set the current email to the controller
+    _fetchUserProfile();
+  }
+
+  Future<void> _fetchUserProfile() async {
+    final user = FirebaseAuth.instance.currentUser;
+    final idToken = await user?.getIdToken();
+
+    final url = Uri.parse('http://192.168.32.58:3000/user/profile'); 
+    final headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $idToken',
+    };
+
+    try {
+      final response = await http.get(url, headers: headers);
+      if (response.statusCode == 200) {
+        final profileData = jsonDecode(response.body);
+        setState(() {
+          _emailController.text = profileData['email'];
+          _isLoading = false;
+        });
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Failed to load profile')),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Error occurred while fetching profile')),
+      );
     }
   }
 
-  void _updateEmail() async {
-    try {
-      await user!.updateEmail(_emailController.text);
-      await user!.reload(); // Reload the user to get updated info
-      user = _auth.currentUser; // Refresh the user instance
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Email updated successfully!')),
-      );
-      setState(() {}); // Update the UI
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to update email: $e')),
-      );
-    }
+  @override
+  void dispose() {
+    _emailController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Profile Page'),
-        centerTitle: true,
-        backgroundColor: Colors.teal,
+        title: const Text('Profile'),
+        backgroundColor: Colors.lightBlue,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
       ),
-      body: Center(
-        child: user != null
-            ? SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Card(
-                    elevation: 8,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(20.0),
-                      child: Form(
-                        key: _formKey,
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text(
-                              'Logged in as:',
-                              style: TextStyle(
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            SizedBox(height: 10),
-                            Text(
-                              user!.email ?? 'No Email',
-                              style: TextStyle(
-                                fontSize: 24,
-                                fontWeight: FontWeight.w600,
-                                color: Colors.teal,
-                              ),
-                            ),
-                            SizedBox(height: 20),
-                            TextFormField(
-                              controller: _emailController,
-                              decoration: InputDecoration(
-                                labelText: 'Edit Email',
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                  borderSide: BorderSide(color: Colors.teal),
-                                ),
-                                focusedBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                  borderSide: BorderSide(color: Colors.teal),
-                                ),
-                                errorBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                  borderSide: BorderSide(color: Colors.red),
-                                ),
-                                enabledBorder: OutlineInputBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                  borderSide: BorderSide(color: Colors.grey),
-                                ),
-                              ),
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return 'Please enter your email';
-                                }
-                                return null;
-                              },
-                            ),
-                            SizedBox(height: 20),
-                            ElevatedButton(
-                              onPressed: () {
-                                if (_formKey.currentState!.validate()) {
-                                  _updateEmail(); // Call the update email function
-                                }
-                              },
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.teal,
-                                padding: EdgeInsets.symmetric(horizontal: 32, vertical: 12),
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
-                              ),
-                              child: Text(
-                                'Update Email',
-                                style: TextStyle(fontSize: 18),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
+      body: _isLoading
+          ? const Center(child: CircularProgressIndicator())
+          : Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  _buildTextField(
+                    controller: _emailController,
+                    label: 'Email',
+                    hintText: 'Enter your email',
+                    icon: Icons.email,
+                    isReadOnly: true,  // Email is readonly for now
                   ),
-                ),
-              )
-            : Text('No user is currently logged in.'),
+                  const SizedBox(height: 16.0),
+                  // Placeholder for future fields
+                  const Text('More profile details coming soon...', style: TextStyle(fontStyle: FontStyle.italic)),
+                ],
+              ),
+            ),
+    );
+  }
+
+  Widget _buildTextField({
+    required TextEditingController controller,
+    required String label,
+    required String hintText,
+    required IconData icon,
+    bool isReadOnly = false,
+  }) {
+    return TextFormField(
+      controller: controller,
+      readOnly: isReadOnly,
+      decoration: InputDecoration(
+        labelText: label,
+        hintText: hintText,
+        prefixIcon: Icon(icon),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8.0),
+        ),
       ),
     );
   }
