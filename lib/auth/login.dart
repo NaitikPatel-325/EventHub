@@ -49,7 +49,7 @@ class _LoginState extends State<Login> {
               style: TextStyle(
                 fontSize: 32.0,
                 fontWeight: FontWeight.bold,
-                color: Colors.teal,
+                color:Colors.deepPurpleAccent,
               ),
             ),
             const SizedBox(height: 10.0),
@@ -65,7 +65,7 @@ class _LoginState extends State<Login> {
               controller: email,
               keyboardType: TextInputType.emailAddress,
               decoration: InputDecoration(
-                prefixIcon: const Icon(Icons.email, color: Colors.teal),
+                prefixIcon: const Icon(Icons.email, color:Colors.deepPurpleAccent),
                 hintText: 'Email Address',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.0),
@@ -77,7 +77,7 @@ class _LoginState extends State<Login> {
               controller: password,
               obscureText: true,
               decoration: InputDecoration(
-                prefixIcon: const Icon(Icons.lock, color: Colors.teal),
+                prefixIcon: const Icon(Icons.lock, color:Colors.deepPurpleAccent),
                 hintText: 'Password',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.0),
@@ -88,7 +88,7 @@ class _LoginState extends State<Login> {
             ElevatedButton(
               onPressed: signin,
               style: ElevatedButton.styleFrom(
-                minimumSize: const Size(double.infinity, 50), backgroundColor: Colors.teal,
+                minimumSize: const Size(double.infinity, 50), backgroundColor:Colors.deepPurpleAccent,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10.0),
                 ),
@@ -111,7 +111,7 @@ class _LoginState extends State<Login> {
                   child: const Text(
                     'Register',
                     style: TextStyle(
-                      color: Colors.teal,
+                      color:Colors.deepPurpleAccent,
                       fontSize: 16.0,
                       fontWeight: FontWeight.bold,
                     ),
@@ -122,7 +122,7 @@ class _LoginState extends State<Login> {
                   child: const Text(
                     'Forgot Password?',
                     style: TextStyle(
-                      color: Colors.teal,
+                      color:Colors.deepPurpleAccent,
                       fontSize: 16.0,
                       fontWeight: FontWeight.bold,
                     ),

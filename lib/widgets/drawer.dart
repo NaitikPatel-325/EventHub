@@ -12,7 +12,7 @@ Widget buildDrawer(
       children: <Widget>[
         const DrawerHeader(
           decoration: BoxDecoration(
-            color: Colors.blue,
+            color:Colors.deepPurpleAccent,
           ),
           child: Text(
             'EventHub',
@@ -26,7 +26,7 @@ Widget buildDrawer(
         _buildDrawerItem(context, Icons.person, 'Profile', 0, onNavItemDrawerTapped),
         _buildDrawerItem(context, Icons.feedback, 'Feedback', 1, onNavItemDrawerTapped),
         ListTile(
-          leading: const Icon(Icons.dark_mode, color: Colors.blue),
+          leading: const Icon(Icons.dark_mode, color:Colors.deepPurpleAccent),
           title: const Text('Dark Mode'),
           trailing: Switch(
             value: isDarkMode,
@@ -41,7 +41,7 @@ Widget buildDrawer(
 
 Widget _buildDrawerItem(BuildContext context, IconData icon, String title, int index, Function(int) onNavItemTapped) {
   return ListTile(
-    leading: Icon(icon, color: Colors.blue),
+    leading: Icon(icon, color: Colors.deepPurpleAccent),
     title: Text(title),
     onTap: () {
       onNavItemTapped(index);

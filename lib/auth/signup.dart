@@ -18,7 +18,7 @@ class _SignupState extends State<Signup> {
   bool isAgreedToTerms = false; 
 
   void signUp(String email, String password, String username, String phone) async {
-    final String baseUrl = 'http://192.168.32.58:3000';
+    final String baseUrl = 'http://192.168.146.251:3000';
     print("insidesignup");
     try {
       final response = await http.post(
@@ -36,7 +36,7 @@ class _SignupState extends State<Signup> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('User created successfully!'),
-            backgroundColor: Colors.green,
+            backgroundColor: Colors.deepPurpleAccent,
           ),
         );
         Navigator.of(context).pushReplacementNamed('/login');
@@ -81,7 +81,7 @@ class _SignupState extends State<Signup> {
           ),
         ),
         centerTitle: true,
-        backgroundColor: Colors.teal,
+        backgroundColor:Colors.deepPurpleAccent,
         elevation: 0,
       ),
       body: SingleChildScrollView(
@@ -96,7 +96,7 @@ class _SignupState extends State<Signup> {
               style: TextStyle(
                 fontSize: 32.0,
                 fontWeight: FontWeight.bold,
-                color: Colors.teal,
+                color:Colors.deepPurpleAccent,
               ),
             ),
             const SizedBox(height: 10.0),
@@ -112,7 +112,7 @@ class _SignupState extends State<Signup> {
             TextField(
               controller: usernameController,
               decoration: InputDecoration(
-                prefixIcon: const Icon(Icons.person, color: Colors.teal),
+                prefixIcon: const Icon(Icons.person, color:Colors.deepPurpleAccent),
                 hintText: 'Username',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.0),
@@ -125,7 +125,7 @@ class _SignupState extends State<Signup> {
               controller: emailController,
               keyboardType: TextInputType.emailAddress,
               decoration: InputDecoration(
-                prefixIcon: const Icon(Icons.email, color: Colors.teal),
+                prefixIcon: const Icon(Icons.email, color: Colors.deepPurpleAccent),
                 hintText: 'Email Address',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.0),
@@ -138,7 +138,7 @@ class _SignupState extends State<Signup> {
               controller: passwordController,
               obscureText: true,
               decoration: InputDecoration(
-                prefixIcon: const Icon(Icons.lock, color: Colors.teal),
+                prefixIcon: const Icon(Icons.lock, color: Colors.deepPurpleAccent),
                 hintText: 'Password',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.0),
@@ -151,7 +151,7 @@ class _SignupState extends State<Signup> {
               controller: phoneController,
               keyboardType: TextInputType.phone,
               decoration: InputDecoration(
-                prefixIcon: const Icon(Icons.phone, color: Colors.teal),
+                prefixIcon: const Icon(Icons.phone, color:Colors.deepPurpleAccent),
                 hintText: 'Phone Number (+country code)',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.0),
@@ -197,7 +197,7 @@ class _SignupState extends State<Signup> {
               },
               style: ElevatedButton.styleFrom(
                 minimumSize: const Size(double.infinity, 50),
-                backgroundColor: Colors.teal,
+                backgroundColor:Colors.deepPurpleAccent,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10.0),
                 ),
@@ -219,7 +219,7 @@ class _SignupState extends State<Signup> {
                 child: const Text(
                   'Already have an account? Login',
                   style: TextStyle(
-                    color: Colors.teal,
+                    color:Colors.deepPurpleAccent,
                     fontSize: 16.0,
                     fontWeight: FontWeight.bold,
                   ),

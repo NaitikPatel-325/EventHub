@@ -67,7 +67,7 @@ class _CreateEventPageState extends State<CreateEventPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Create Event'),
-        backgroundColor: Colors.lightBlue,
+        backgroundColor:Colors.deepPurpleAccent,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
@@ -191,7 +191,7 @@ class _CreateEventPageState extends State<CreateEventPage> {
       decoration: InputDecoration(
         labelText: label,
         hintText: hintText,
-        prefixIcon: Icon(icon, color: Colors.blueAccent),
+        prefixIcon: Icon(icon, color:Colors.deepPurpleAccent),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8.0),
         ),
@@ -223,7 +223,7 @@ class _CreateEventPageState extends State<CreateEventPage> {
           decoration: InputDecoration(
             labelText: label,
             hintText: hintText,
-            prefixIcon: Icon(icon, color: Colors.blueAccent),
+            prefixIcon: Icon(icon, color:Colors.deepPurpleAccent),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(8.0),
             ),

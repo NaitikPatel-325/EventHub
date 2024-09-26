@@ -25,7 +25,7 @@ class _EventListPageState extends State<EventListPage> {
     final user = FirebaseAuth.instance.currentUser;
     final idToken = await user?.getIdToken();
 
-    final url = Uri.parse('http://192.168.32.58:3000/user/allevent');
+    final url = Uri.parse('http://192.168.146.251:3000/user/allevent');
     final headers = {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer $idToken',
@@ -70,7 +70,7 @@ class _EventListPageState extends State<EventListPage> {
     final user = FirebaseAuth.instance.currentUser;
     final idToken = await user?.getIdToken();
 
-    final url = Uri.parse('http://192.168.32.58:3000/user/eventregister');
+    final url = Uri.parse('http://192.168.146.251:3000/user/eventregister');
     final headers = {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer $idToken',

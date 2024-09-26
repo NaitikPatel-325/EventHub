@@ -10,7 +10,7 @@ PreferredSizeWidget buildAppBar(BuildContext context) {
         fontWeight: FontWeight.bold,
       ),
     ),
-    backgroundColor: Colors.blue,
+    backgroundColor: Colors.deepPurpleAccent,
     centerTitle: true,
     actions: [
       IconButton(

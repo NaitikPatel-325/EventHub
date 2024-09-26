@@ -30,7 +30,7 @@ class Statistics extends StatelessWidget {
       child: ListTile(
         title: Text(title),
         subtitle: Text(subtitle),
-        leading: Icon(icon, color: Colors.blue),
+        leading: Icon(icon, color:Colors.deepPurpleAccent),
       ),
     );
   }
