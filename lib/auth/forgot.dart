@@ -66,7 +66,7 @@ class Forgot extends State<ForgotPasswordPage> {
           ),
         ),
         centerTitle: true,
-        backgroundColor: Colors.teal,
+        backgroundColor:Colors.deepPurpleAccent,
         elevation: 0,
       ),
       body: SingleChildScrollView(
@@ -81,7 +81,7 @@ class Forgot extends State<ForgotPasswordPage> {
               style: TextStyle(
                 fontSize: 32.0,
                 fontWeight: FontWeight.bold,
-                color: Colors.teal,
+                color:Colors.deepPurpleAccent,
               ),
             ),
             const SizedBox(height: 10.0),
@@ -97,7 +97,7 @@ class Forgot extends State<ForgotPasswordPage> {
               controller: _email,
               keyboardType: TextInputType.emailAddress,
               decoration: InputDecoration(
-                prefixIcon: const Icon(Icons.email, color: Colors.teal),
+                prefixIcon: const Icon(Icons.email, color:Colors.deepPurpleAccent),
                 labelText: 'Email Address',
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(10.0),
@@ -110,7 +110,7 @@ class Forgot extends State<ForgotPasswordPage> {
                 : ElevatedButton(
                     onPressed: _resetPassword,
                     style: ElevatedButton.styleFrom(
-                      minimumSize: const Size(double.infinity, 50), backgroundColor: Colors.teal,
+                      minimumSize: const Size(double.infinity, 50), backgroundColor:Colors.deepPurpleAccent,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.0),
                       ),
@@ -130,7 +130,7 @@ class Forgot extends State<ForgotPasswordPage> {
                 child: const Text(
                   'Back to Login',
                   style: TextStyle(
-                    color: Colors.teal,
+                    color: Colors.deepPurpleAccent,
                     fontSize: 16.0,
                     fontWeight: FontWeight.bold,
                   ),

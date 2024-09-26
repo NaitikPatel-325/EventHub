@@ -35,7 +35,7 @@ class SignOutPage extends StatelessWidget {
             const Icon(
               Icons.exit_to_app,
               size: 100.0,
-              color: Colors.teal,
+              color:Colors.deepPurpleAccent,
             ),
             const SizedBox(height: 30.0),
             Text(
@@ -51,7 +51,7 @@ class SignOutPage extends StatelessWidget {
               onPressed: () => _signOut(context),
               style: ElevatedButton.styleFrom(
                 minimumSize: const Size(double.infinity, 50),
-                backgroundColor: Colors.teal,
+                backgroundColor:Colors.deepPurpleAccent,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10.0),
                 ),
@@ -61,6 +61,7 @@ class SignOutPage extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 18.0,
                   fontWeight: FontWeight.bold,
+                  color: Colors.white
                 ),
               ),
             ),
@@ -69,7 +70,7 @@ class SignOutPage extends StatelessWidget {
               onPressed: () => Navigator.of(context).pop(),
               style: OutlinedButton.styleFrom(
                 minimumSize: const Size(double.infinity, 50),
-                side: const BorderSide(color: Colors.teal),
+                side: const BorderSide(color: Colors.deepPurpleAccent),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10.0),
                 ),
@@ -79,7 +80,7 @@ class SignOutPage extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 18.0,
                   fontWeight: FontWeight.bold,
-                  color: Colors.teal,
+                  color:Colors.deepPurpleAccent,
                 ),
               ),
             ),
