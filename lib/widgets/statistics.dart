@@ -1,19 +1,19 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fl_chart/fl_chart.dart';
-import 'package:firebase_database/firebase_database.dart';
 
 class Statistics extends StatefulWidget {
   const Statistics({super.key});
 
   @override
-  _StatisticsState createState() => _StatisticsState();
+  _StatisticsPageState createState() => _StatisticsPageState();
 }
 
-class _StatisticsState extends State<Statistics> {
-  int totalEvents = 0;
-  int totalUsers = 0;
-  bool isLoading = true;
-  bool fetchFailed = false;  // New flag to check if fetch failed
+class _StatisticsPageState extends State<Statistics> {
+  Map<String, dynamic> _statistics = {};
+  bool _isLoading = true;
 
   @override
   void initState() {
@@ -22,78 +22,89 @@ class _StatisticsState extends State<Statistics> {
   }
 
   Future<void> _fetchStatistics() async {
+    final user = FirebaseAuth.instance.currentUser;
+    final idToken = await user?.getIdToken();
+
+    final url = Uri.parse('http://192.168.146.251:3000/user/statastic'); // Replace with your statistics endpoint
+    final headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $idToken',
+    };
+
     try {
-      // Reference to Firebase Realtime Database
-      final DatabaseReference databaseRef = FirebaseDatabase.instance.ref();
-
-      // Fetch total number of events
-      final DataSnapshot eventsSnapshot = await databaseRef.child('events').get();
-      final int totalEventsCount = eventsSnapshot.children.length;
-
-      // Fetch total number of users
-      final DataSnapshot usersSnapshot = await databaseRef.child('users').get();
-      final int totalUsersCount = usersSnapshot.children.length;
-
+      final response = await http.get(url, headers: headers);
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> statistics = jsonDecode(response.body);
+        setState(() {
+          _statistics = statistics;
+          _isLoading = false;
+        });
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Failed to load statistics')),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Error occurred while fetching statistics')),
+      );
+    } finally {
       setState(() {
-        totalEvents = totalEventsCount;
-        totalUsers = totalUsersCount;
-        isLoading = false;
-        fetchFailed = false;  // Fetch was successful
-      });
-    } catch (error) {
-      print('Error fetching data: $error');
-      setState(() {
-        isLoading = false;
-        fetchFailed = true;  // Fetch failed, fallback to dummy data
+        _isLoading = false;
       });
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        Text(
-          'Event Statistics',
-          style: Theme.of(context).textTheme.titleMedium,
-        ),
-        const SizedBox(height: 16.0),
-        isLoading
-            ? const CircularProgressIndicator()
-            : Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    return Center(
+      child: _isLoading
+          ? const CircularProgressIndicator(color: Colors.deepPurpleAccent)
+          : Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  Expanded(child: _buildPieChart()), // Pie chart on the left
-                  const SizedBox(width: 16.0), // Space between chart and legend
-                  _buildLegend(), // Legend on the right
+                  const Text(
+                    'Overall Statistics',
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  ),
+                  const SizedBox(height: 16),
+                  _buildPieChart(),
+                  const SizedBox(height: 20),
+                  _buildLegend(),
                 ],
               ),
-      ],
+            ),
     );
   }
 
   Widget _buildPieChart() {
-    return Container(
-      height: 200, // Adjust the height as needed
+    // Sample data for the pie chart
+    final totalEvents = _statistics['totalEvents'] ?? 0;
+    final totalUsers = _statistics['totalUsers'] ?? 0;
+
+    return SizedBox(
+      height: 200, // Set a fixed height for the pie chart
       child: PieChart(
         PieChartData(
           sections: [
             PieChartSectionData(
-              value: fetchFailed ? 10.0 : totalEvents.toDouble(),  // Use dummy if fetch failed
-              title: 'Total Events',
+              value: totalEvents.toDouble(),
+              title: totalEvents.toString(), // Show the value instead of text
               color: Colors.blue,
               radius: 50,
             ),
             PieChartSectionData(
-              value: fetchFailed ? 5.0 : totalUsers.toDouble(),  // Use dummy if fetch failed
-              title: 'Total Users',
-              color: Colors.green,
+              value: totalUsers.toDouble(),
+              title: totalUsers.toString(), // Show the value instead of text
+              color: Colors.orange,
               radius: 50,
             ),
           ],
           borderData: FlBorderData(show: false),
           centerSpaceRadius: 30,
+          sectionsSpace: 0, // No space between sections
         ),
       ),
     );
@@ -104,15 +115,13 @@ class _StatisticsState extends State<Statistics> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _buildLegendItem(Colors.blue, 'Total Events'),
-        _buildLegendItem(Colors.green, 'Total Users'),
+        _buildLegendItem(Colors.orange, 'Registered Users'),
       ],
     );
   }
 
-  Widget _buildLegendItem(Color color, String title) {
-  return Padding(
-    padding: const EdgeInsets.symmetric(vertical: 4.0, horizontal: 8.0), // Adjust padding as needed
-    child: Row(
+  Widget _buildLegendItem(Color color, String label) {
+    return Row(
       children: [
         Container(
           width: 20,
@@ -120,10 +129,8 @@ class _StatisticsState extends State<Statistics> {
           color: color,
         ),
         const SizedBox(width: 8),
-        Text(title),
+        Text(label, style: const TextStyle(fontSize: 16)),
       ],
-    ),
-  );
-}
-
+    );
+  }
 }

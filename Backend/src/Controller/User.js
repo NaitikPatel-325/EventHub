@@ -83,7 +83,7 @@ const createevent = async (req, res) => {
 };
 
 const countAllEventsAndUsers = async (req, res) => {
-    console.log("count all event");
+    console.log("count all event and user");
     try {
         const db = admin.database();
         const eventsRef = db.ref('events');
@@ -102,7 +102,8 @@ const countAllEventsAndUsers = async (req, res) => {
         const eventUserData = eventUserSnapshot.val();
 
         const totalUsers = eventUserData ? Object.keys(eventUserData).length : 0;
-        console.log(totalEvents,totalUsers);
+        console.log("Total events: ", totalEvents);
+        console.log("Total users: ", totalUsers);
         res.status(200).json({
             message: 'Total events and users count fetched successfully',
             totalEvents,
