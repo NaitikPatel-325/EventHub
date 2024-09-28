@@ -70,9 +70,14 @@ class _StatisticsPageState extends State<Statistics> {
                     style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
                   ),
                   const SizedBox(height: 16),
-                  _buildPieChart(),
-                  const SizedBox(height: 20),
-                  _buildLegend(),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      _buildPieChart(),  // Pie chart
+                      const SizedBox(width: 20),
+                      _buildLegend(),    // Legend beside the chart
+                    ],
+                  ),
                 ],
               ),
             ),
@@ -86,20 +91,23 @@ class _StatisticsPageState extends State<Statistics> {
 
     return SizedBox(
       height: 200, // Set a fixed height for the pie chart
+      width: 200,  // Set a fixed width for the pie chart
       child: PieChart(
         PieChartData(
           sections: [
             PieChartSectionData(
               value: totalEvents.toDouble(),
-              title: totalEvents.toString(), // Show the value instead of text
+              title: totalEvents.toString(), // Show the value inside the chart
               color: Colors.blue,
               radius: 50,
+              titleStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
             ),
             PieChartSectionData(
               value: totalUsers.toDouble(),
-              title: totalUsers.toString(), // Show the value instead of text
+              title: totalUsers.toString(), // Show the value inside the chart
               color: Colors.orange,
               radius: 50,
+              titleStyle: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.white),
             ),
           ],
           borderData: FlBorderData(show: false),
@@ -115,6 +123,7 @@ class _StatisticsPageState extends State<Statistics> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _buildLegendItem(Colors.blue, 'Total Events'),
+        const SizedBox(height: 8),
         _buildLegendItem(Colors.orange, 'Registered Users'),
       ],
     );
