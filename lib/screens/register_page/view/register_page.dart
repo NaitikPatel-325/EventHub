@@ -88,7 +88,12 @@ class _EventListPageState extends State<EventListPage> {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Registered successfully!')),
         );
-      } else {
+      }else if(response.statusCode == 409){
+                ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('User Is Already Registered')),
+        );
+      }
+       else {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Failed to register')),
         );

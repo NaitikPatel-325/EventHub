@@ -59,7 +59,7 @@ class _ProfilePageState extends State<ProfilePage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Profile'),
-        backgroundColor:Colors.deepPurpleAccent,
+        backgroundColor: Colors.deepPurpleAccent,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
@@ -69,17 +69,67 @@ class _ProfilePageState extends State<ProfilePage> {
       ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
-          : Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('Username: ${_username ?? 'N/A'}', style: const TextStyle(fontSize: 18)),
-                  const SizedBox(height: 16.0),
-                  Text('Email: ${_email ?? 'N/A'}', style: const TextStyle(fontSize: 18)),
-                  const SizedBox(height: 16.0),
-                  Text('Phone: ${_phone ?? 'N/A'}', style: const TextStyle(fontSize: 18)),
-                ],
+          : SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    // Profile Image
+                    CircleAvatar(
+                      radius: 50,
+                      backgroundColor: Colors.deepPurpleAccent,
+                      child: Icon(
+                        Icons.person,
+                        size: 50,
+                        color: Colors.white,
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    
+                    // Username, Email, Phone inside cards
+                    Card(
+                      margin: const EdgeInsets.symmetric(vertical: 10.0),
+                      child: ListTile(
+                        leading: Icon(Icons.person, color: Colors.deepPurpleAccent),
+                        title: Text('Username'),
+                        subtitle: Text(_username ?? 'N/A'),
+                      ),
+                    ),
+                    Card(
+                      margin: const EdgeInsets.symmetric(vertical: 10.0),
+                      child: ListTile(
+                        leading: Icon(Icons.email, color: Colors.deepPurpleAccent),
+                        title: Text('Email'),
+                        subtitle: Text(_email ?? 'N/A'),
+                      ),
+                    ),
+                    Card(
+                      margin: const EdgeInsets.symmetric(vertical: 10.0),
+                      child: ListTile(
+                        leading: Icon(Icons.phone, color: Colors.deepPurpleAccent),
+                        title: Text('Phone'),
+                        subtitle: Text(_phone ?? 'N/A'),
+                      ),
+                    ),
+                    
+                    // Logout button
+                    const SizedBox(height: 30),
+                    ElevatedButton.icon(
+                      onPressed: () {
+                        FirebaseAuth.instance.signOut();
+                        Navigator.pop(context);
+                      },
+                      icon: const Icon(Icons.logout),
+                      label: const Text('Logout'),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.deepPurpleAccent,
+                        padding: const EdgeInsets.symmetric(horizontal: 50, vertical: 15),
+                        textStyle: const TextStyle(fontSize: 18),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
     );

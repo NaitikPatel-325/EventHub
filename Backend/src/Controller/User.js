@@ -82,6 +82,40 @@ const createevent = async (req, res) => {
     }
 };
 
+const countAllEventsAndUsers = async (req, res) => {
+    console.log("count all event");
+    try {
+        const db = admin.database();
+        const eventsRef = db.ref('events');
+        const eventUserRef = db.ref('event_user');
+
+        const eventsSnapshot = await eventsRef.once('value');
+        const eventsData = eventsSnapshot.val();
+
+        if (!eventsData) {
+            return res.status(404).json({ message: 'No events found' });
+        }
+
+        const totalEvents = Object.keys(eventsData).length;
+
+        const eventUserSnapshot = await eventUserRef.once('value');
+        const eventUserData = eventUserSnapshot.val();
+
+        const totalUsers = eventUserData ? Object.keys(eventUserData).length : 0;
+        console.log(totalEvents,totalUsers);
+        res.status(200).json({
+            message: 'Total events and users count fetched successfully',
+            totalEvents,
+            totalUsers
+        });
+    } catch (error) {
+        console.error('Error fetching events and users count:', error);
+        res.status(500).json({ message: 'Error fetching events and users count' });
+    }
+};
+
+
+
 const getAllEvents = async (req, res) => {
     console.log("get all events");  
     try {
@@ -190,4 +224,4 @@ const eventregister = async (req, res) => {
         }
 };
 
-export {register,createevent,getAllEvents,profile,eventregister};
+export {register,createevent,getAllEvents,profile,eventregister,countAllEventsAndUsers};
