@@ -241,6 +241,8 @@ const getspecificevent = async (req, res) => {
 
         const eventsSnapshot = await eventsRef.once('value');
         const events = eventsSnapshot.val();
+        
+        // console.log('Fetched Events:', events);
 
         if (!events) {
             return res.status(404).json({ message: 'No events found.' });
@@ -252,24 +254,33 @@ const getspecificevent = async (req, res) => {
                 eventId,
                 ...events[eventId]
             }));
-
+        
+        // console.log('User Events:', userEvents);
         if (userEvents.length === 0) {
             return res.status(404).json({ message: 'No events found for this user.' });
         }
 
         const eventUserSnapshot = await eventUserRef.once('value');
         const eventUserData = eventUserSnapshot.val() || {};
+        console.log('Event User Data:', eventUserData);
 
         const userEventsWithCounts = userEvents.map(event => {
             const eventId = event.eventId;
-            const usersForEvent = eventUserData[eventId] || {};  
-            const userCount = Object.keys(usersForEvent).length; 
-
+        
+            console.log('Checking registered users for eventId:', eventId);
+        
+            const registeredUsersCount = Object.values(eventUserData)
+                .filter(userEvent => userEvent.eventId === eventId)  
+                .length;  
+        
+            console.log('Registered User Count for eventId', eventId, ':', registeredUsersCount);
+        
             return {
                 ...event,
-                registeredUsersCount: userCount
+                registeredUsersCount
             };
         });
+        
 
         console.log('User-specific events with registered user count fetched successfully');
         res.status(200).json(userEventsWithCounts);

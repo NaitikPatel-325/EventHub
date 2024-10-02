@@ -83,9 +83,9 @@ class _HomePageState extends State<HomePage> {
           currentIndex: _selectedIndex,
           onTap: _onNavItemTapped,
           items: const [
-            BottomNavigationBarItem(icon: Icon(Icons.event), label: 'Create Event'),
-            BottomNavigationBarItem(icon: Icon(Icons.person_add), label: 'Register'),
-            BottomNavigationBarItem(icon: Icon(Icons.abc_outlined),label: 'My Events'),
+            BottomNavigationBarItem(icon: Icon(Icons.event_note), label: 'Create Event'),
+            BottomNavigationBarItem(icon: Icon(Icons.app_registration), label: 'Register'),
+            BottomNavigationBarItem(icon: Icon(Icons.event_available),label: 'My Events'),
           ],
           selectedItemColor:Colors.deepPurpleAccent,
           unselectedItemColor:Colors.deepPurpleAccent,
