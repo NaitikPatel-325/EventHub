@@ -10,6 +10,7 @@ import 'screens/live_update/view/live_updates_page.dart';
 import 'screens/profile_page/view/profile_page.dart';
 import 'screens/feedback_page/views/feedback_page.dart';
 import 'screens/notification_page/view/notifications_page.dart';
+import 'screens/event_details/view/myevent.dart';
 import 'auth/signup.dart';
 import 'auth/login.dart';
 import 'auth/forgot.dart';
@@ -64,6 +65,7 @@ class MyApp extends StatelessWidget {
           '/login': (context) =>  const Login(),
           '/forgot': (context) =>  ForgotPasswordPage(),
           '/signout': (context) => SignOutPage(),
+          '/myevent' : (context) => MyEventListPage(),
         },
 
       );

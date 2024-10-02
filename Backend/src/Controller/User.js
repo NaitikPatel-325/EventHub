@@ -225,4 +225,63 @@ const eventregister = async (req, res) => {
         }
 };
 
-export {register,createevent,getAllEvents,profile,eventregister,countAllEventsAndUsers};
+
+const getspecificevent = async (req, res) => {
+    console.log("Get all events created by user along with registered user count");  
+    try {
+        const userId = req.query.userId;
+        
+        if (!userId) {
+            return res.status(400).json({ message: 'User ID is required.' });
+        }
+
+        const db = admin.database();
+        const eventsRef = db.ref('events');
+        const eventUserRef = db.ref('event_user');  
+
+        const eventsSnapshot = await eventsRef.once('value');
+        const events = eventsSnapshot.val();
+
+        if (!events) {
+            return res.status(404).json({ message: 'No events found.' });
+        }
+
+        const userEvents = Object.keys(events)
+            .filter(eventId => events[eventId].createdBy === userId)
+            .map(eventId => ({
+                eventId,
+                ...events[eventId]
+            }));
+
+        if (userEvents.length === 0) {
+            return res.status(404).json({ message: 'No events found for this user.' });
+        }
+
+        const eventUserSnapshot = await eventUserRef.once('value');
+        const eventUserData = eventUserSnapshot.val() || {};
+
+        const userEventsWithCounts = userEvents.map(event => {
+            const eventId = event.eventId;
+            const usersForEvent = eventUserData[eventId] || {};  
+            const userCount = Object.keys(usersForEvent).length; 
+
+            return {
+                ...event,
+                registeredUsersCount: userCount
+            };
+        });
+
+        console.log('User-specific events with registered user count fetched successfully');
+        res.status(200).json(userEventsWithCounts);
+    } catch (error) {
+        console.log('Error:', error);
+        if (!res.headersSent) {
+            return res.status(500).json({ message: 'Error fetching events.', error: error.message });
+        } else {
+            console.error('Headers already sent:', error);
+        }
+    }
+};
+
+
+export {register,createevent,getAllEvents,profile,eventregister,countAllEventsAndUsers,getspecificevent};

@@ -35,7 +35,7 @@ class _HomePageState extends State<HomePage> {
         Navigator.pushNamed(context, '/register');
         break;
       case 2:
-        Navigator.pushNamed(context, '/qr-code');
+        Navigator.pushNamed(context, '/myevent');
         break;
       default:
         break;
@@ -85,6 +85,7 @@ class _HomePageState extends State<HomePage> {
           items: const [
             BottomNavigationBarItem(icon: Icon(Icons.event), label: 'Create Event'),
             BottomNavigationBarItem(icon: Icon(Icons.person_add), label: 'Register'),
+            BottomNavigationBarItem(icon: Icon(Icons.abc_outlined),label: 'My Events'),
           ],
           selectedItemColor:Colors.deepPurpleAccent,
           unselectedItemColor:Colors.deepPurpleAccent,

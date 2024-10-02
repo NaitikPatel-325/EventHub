@@ -25,7 +25,7 @@ class _StatisticsPageState extends State<Statistics> {
     final user = FirebaseAuth.instance.currentUser;
     final idToken = await user?.getIdToken();
 
-    final url = Uri.parse('http://192.168.146.251:3000/user/statastic'); // Replace with your statistics endpoint
+    final url = Uri.parse('http://192.168.32.58:3000/user/statastic'); // Replace with your statistics endpoint
     final headers = {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer $idToken',

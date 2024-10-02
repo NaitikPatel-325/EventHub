@@ -18,7 +18,7 @@ class _SignupState extends State<Signup> {
   bool isAgreedToTerms = false; 
 
   void signUp(String email, String password, String username, String phone) async {
-    final String baseUrl = 'http://192.168.146.251:3000';
+    final String baseUrl = 'http://192.168.32.58:3000';
     print("insidesignup");
     try {
       final response = await http.post(

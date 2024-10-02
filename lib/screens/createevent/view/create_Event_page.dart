@@ -27,7 +27,7 @@ class _CreateEventPageState extends State<CreateEventPage> {
     final user = FirebaseAuth.instance.currentUser;
     final idToken = await user?.getIdToken();
 
-    final url = Uri.parse('http://192.168.146.251:3000/user/create');
+    final url = Uri.parse('http://192.168.32.58:3000/user/create');
     final headers = {
      'Content-Type': 'application/json',
       'Authorization': 'Bearer $idToken',
