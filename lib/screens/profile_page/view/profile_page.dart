@@ -26,7 +26,7 @@ class _ProfilePageState extends State<ProfilePage> {
     final user = FirebaseAuth.instance.currentUser;
     final idToken = await user?.getIdToken();
 
-    final url = Uri.parse('http://192.168.32.58:3000/user/profile'); 
+    final url = Uri.parse('http://192.168.1.167:3000/user/profile'); 
     final headers = {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer $idToken',

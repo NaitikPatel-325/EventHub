@@ -32,7 +32,7 @@ class _MyEventListPageState extends State<MyEventListPage> {
       return;
     }
 
-    final url = Uri.parse('http://192.168.32.58:3000/user/myevent?userId=$userId');
+    final url = Uri.parse('http://192.168.1.167:3000/user/myevent?userId=$userId');
     final headers = {
       'Content-Type': 'application/json',
       'Authorization': 'Bearer $idToken',
@@ -84,7 +84,7 @@ class _MyEventListPageState extends State<MyEventListPage> {
                   itemCount: _events.length,
                   itemBuilder: (context, index) {
                     final event = _events[index];
-                    int registeredCount = event['registeredCount'] ?? 0;
+                    int registeredCount = event['registeredUsersCount'] ?? 0;
 
                     return Card(
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
