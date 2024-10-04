@@ -2,6 +2,7 @@ import express from 'express';
 import admin from 'firebase-admin';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import cookieParser from 'cookie-parser';
 import userRoutes from './Routes/UserRoutes.js';
 
 dotenv.config({
@@ -15,6 +16,7 @@ app.use(cors({
   credentials: true
 }))
 
+app.use(cookieParser());
 app.use('/user', userRoutes); 
 
 app.listen(3000, () => {
